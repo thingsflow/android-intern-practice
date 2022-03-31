@@ -37,17 +37,20 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-        // TODO: Use the ViewModel
 
+        // TODO: Use the ViewModel
         viewModel.changeTitle("google", "dagger")
-        viewModel.getOrgName().observe(viewLifecycleOwner, Observer {
+        observe()
+    }
+
+    private fun observe() = with(viewModel) {
+        orgName.observe(viewLifecycleOwner, Observer {
             binding.orgName.setText(it)
         })
 
-        viewModel.getRepoName().observe(viewLifecycleOwner, Observer {
+        repoName.observe(viewLifecycleOwner, Observer {
             binding.repoName.setText(it)
         })
-
     }
 
 }

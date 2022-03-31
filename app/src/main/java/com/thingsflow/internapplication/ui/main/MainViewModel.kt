@@ -6,27 +6,23 @@ import androidx.lifecycle.ViewModel
 
 class MainViewModel : ViewModel() {
     // TODO: Implement the ViewModel
-    private lateinit var issues: MutableLiveData<ArrayList<Issue>>
-    private var orgName: MutableLiveData<String> = MutableLiveData("google")
-    private var repoName: MutableLiveData<String> = MutableLiveData("dagger")
+    private val _issues = MutableLiveData<ArrayList<Issue>>()
+    val issues: LiveData<ArrayList<Issue>> = _issues
+    private var _orgName = MutableLiveData<String>()
+    var orgName: LiveData<String> = _orgName
+    private var _repoName = MutableLiveData<String>()
+    var repoName: LiveData<String> = _repoName
 
     fun loadIssues(orgName: String, repoName: String) {
-        if (issues == null) {
-            issues = MutableLiveData(ArrayList())
-        }
         // TODO: github api에서 issue 목록 가져오기
     }
 
-    fun getIssues(): LiveData<ArrayList<Issue>> = issues
-    fun getOrgName(): LiveData<String> = orgName
-    fun getRepoName(): LiveData<String> = repoName
-
     fun setOrgName(orgName: String) {
-        this.orgName.postValue(orgName)
+        _orgName.postValue(orgName)
     }
 
     fun setRepoName(repoName: String) {
-        this.repoName.postValue(repoName)
+        _repoName.postValue(repoName)
     }
 
     fun changeTitle(orgName: String, repoName: String) {
