@@ -17,4 +17,11 @@ class MainViewModel : ViewModel() {
     private val _repository = MutableLiveData<String>()
     val repository : LiveData<String> = _repository
 
+    fun setOrganization(organization: String){
+        _organization.value = organization
+    }
+
+    fun setRepository(repository: String){
+        _repository.value = repository
+    }
 }
