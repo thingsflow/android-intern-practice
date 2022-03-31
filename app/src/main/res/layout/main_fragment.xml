@@ -32,5 +32,13 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toEndOf="@id/slash"/>
 
+        <Button
+            android:id="@+id/navTestBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Click For Navigation test"
+            app:layout_constraintTop_toBottomOf="@+id/organizationName"
+            app:layout_constraintStart_toStartOf="parent"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
