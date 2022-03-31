@@ -25,7 +25,7 @@ class MainViewModel @Inject constructor() : ViewModel() {
         // Test data
         val i: Int = 0
         for (i in 0..10) {
-            _issues.value?.add(Issue(i, "test${i}"))
+            _issues.value?.add(Issue(User("user", "profile"), i, "test${i}", "body${i}"))
         }
 
         // TODO: github api에서 issue 목록 가져오기
