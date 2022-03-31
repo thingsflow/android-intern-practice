@@ -2,4 +2,5 @@
 <resources>
     <dimen name="title">30sp</dimen>
     <dimen name="issue_item">20sp</dimen>
+    <dimen name="default_margin">20dp</dimen>
 </resources>
