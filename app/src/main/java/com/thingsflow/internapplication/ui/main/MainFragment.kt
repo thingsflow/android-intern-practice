@@ -33,8 +33,8 @@ class MainFragment : Fragment() {
         return root
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         _binding = null
     }
 
@@ -52,7 +52,7 @@ class MainFragment : Fragment() {
         observe()
     }
 
-    private fun observe() = with(viewModel){
+    private fun observe() = with(viewModel) {
         organization.observe(viewLifecycleOwner, Observer {
             organizationTextView.text = it
         })

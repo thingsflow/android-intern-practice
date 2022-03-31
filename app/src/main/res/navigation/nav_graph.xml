@@ -11,7 +11,7 @@
         android:label="MainFragment"
         tools:layout="@layout/main_fragment">
         <action
-            android:id="@+id/clickIssue"
+            android:id="@+id/action_main_to_detail"
             app:destination="@+id/issueDetailFragment">
         </action>
     </fragment>
