@@ -8,20 +8,22 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.thingsflow.internapplication.R
 import com.thingsflow.internapplication.databinding.MainFragmentBinding
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainFragment : Fragment() {
-
-    private var _binding: MainFragmentBinding? = null
-    private val binding get() = _binding!!
-
     companion object {
         fun newInstance() = MainFragment()
     }
 
+    private var _binding: MainFragmentBinding? = null
+    private val binding get() = _binding!!
+    @Inject
+    private lateinit var issueAdapter: IssueAdapter
     private val viewModel: MainViewModel by viewModels()
 
     override fun onCreateView(
@@ -43,6 +45,10 @@ class MainFragment : Fragment() {
 
         // TODO: Use the ViewModel
         viewModel.changeTitle("google", "dagger")
+        binding.issueRecyclerview.apply {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            adapter = issueAdapter
+        }
         observe()
     }
 
@@ -53,6 +59,10 @@ class MainFragment : Fragment() {
 
         repoName.observe(viewLifecycleOwner, Observer {
             binding.repoName.setText(it)
+        })
+
+        issues.observe(viewLifecycleOwner, Observer {
+            issueAdapter.submitList(it)
         })
     }
 
