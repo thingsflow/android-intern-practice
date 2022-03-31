@@ -1,4 +1,4 @@
-package com.thingsflow.internapplication.ui.main
+package com.thingsflow.internapplication.ui.detail
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.thingsflow.internapplication.databinding.DetailFragmentBinding
+import com.thingsflow.internapplication.ui.main.MainViewModel
 
 class DetailFragment : Fragment() {
     private var _binding: DetailFragmentBinding? = null
