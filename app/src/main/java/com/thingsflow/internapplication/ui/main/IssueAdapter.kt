@@ -11,7 +11,7 @@ import javax.inject.Inject
 
 class IssueAdapter @Inject constructor() : ListAdapter<Issue, IssueAdapter.ViewHolder>(IssueDiffCallback) {
     companion object {
-        const val POS_BANNER = 5
+        const val POS_BANNER = 4
         const val URL_BANNER = "https://s3.ap-northeast-2.amazonaws.com/hellobot-kr-test/image/main_logo.png"
         const val URL_WEBPAGE = "https://thingsflow.com/ko/home"
     }
@@ -28,7 +28,13 @@ class IssueAdapter @Inject constructor() : ListAdapter<Issue, IssueAdapter.ViewH
             holder.bindImage(URL_BANNER)
             return
         }
-        val issue = getItem(position)
+
+        var idx = position
+        if (position > POS_BANNER) {
+            idx = position - 1
+        }
+
+        val issue = getItem(idx)
         holder.bind("#${issue.number}: ${issue.title}")
     }
 
