@@ -6,8 +6,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.lifecycle.Observer
+import androidx.navigation.Navigation
+import com.thingsflow.internapplication.R
 import com.thingsflow.internapplication.databinding.MainFragmentBinding
 
 class MainFragment : Fragment() {
@@ -50,6 +53,12 @@ class MainFragment : Fragment() {
         repositoryTextView = binding.repositoryName
 
         observe()
+
+        //navigation test
+        val navTestBtn: Button = binding.navTestBtn
+        navTestBtn.setOnClickListener {
+            Navigation.findNavController(it).navigate(R.id.action_main_to_detail)
+        }
     }
 
     private fun observe() = with(viewModel) {
