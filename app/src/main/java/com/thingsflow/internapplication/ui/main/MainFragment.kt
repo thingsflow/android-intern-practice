@@ -10,6 +10,8 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.thingsflow.internapplication.R
 import com.thingsflow.internapplication.databinding.MainFragmentBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,15 +29,17 @@ class MainFragment : Fragment() {
 
     private lateinit var organizationTextView: TextView
     private lateinit var repositoryTextView: TextView
+    private lateinit var issueRecyclerView: RecyclerView
+
+    private val issueListAdapter = IssueListAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = MainFragmentBinding.inflate(inflater, container, false)
-        val root: View = binding.root
 
-        return root
+        return binding.root
     }
 
     override fun onDestroyView() {
@@ -50,17 +54,16 @@ class MainFragment : Fragment() {
 
         viewModel.setOrganization("google")
         viewModel.setRepository("dagger")
+        viewModel.setIssueList()
 
         organizationTextView = binding.organizationName
         repositoryTextView = binding.repositoryName
+        issueRecyclerView = binding.issueList
+
+        issueRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        issueRecyclerView.adapter = issueListAdapter
 
         observe()
-
-        //navigation test
-        val navTestBtn: Button = binding.navTestBtn
-        navTestBtn.setOnClickListener {
-            Navigation.findNavController(it).navigate(R.id.action_main_to_detail)
-        }
     }
 
     private fun observe() = with(viewModel) {
@@ -69,6 +72,9 @@ class MainFragment : Fragment() {
         })
         repository.observe(viewLifecycleOwner, Observer {
             repositoryTextView.text = it
+        })
+        issueList.observe(viewLifecycleOwner, Observer {
+            issueListAdapter.submitList(it)
         })
     }
 }

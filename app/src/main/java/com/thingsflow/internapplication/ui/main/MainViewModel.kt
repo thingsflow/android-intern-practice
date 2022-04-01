@@ -27,4 +27,14 @@ class MainViewModel @Inject constructor(): ViewModel() {
     fun setRepository(repository: String){
         _repository.value = repository
     }
+
+    fun setIssueList(){
+
+        _issueList.value = ArrayList()
+
+        //test data
+        for (i in 1..10){
+            _issueList.value?.add(IssueData(i, "the title of the issue"))
+        }
+    }
 }
