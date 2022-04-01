@@ -1,6 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="@dimen/default_margin"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <ImageView
+        android:id="@+id/profile_iv"
+        android:layout_width="@dimen/profile_image"
+        android:layout_height="@dimen/profile_image"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:clipToOutline="true"
+        android:background="@drawable/bg_profile"/>
+
+    <TextView
+        android:id="@+id/profile_name_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/profile_iv"
+        app:layout_constraintBottom_toBottomOf="@+id/profile_iv"
+        android:layout_marginLeft="@dimen/default_margin"
+        android:text="Dayun Cha"
+        android:textSize="@dimen/profile_name"
+        android:textColor="@color/black"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/issue_body_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/profile_iv"
+        android:layout_marginTop="@dimen/default_margin"
+        android:text="blabla"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

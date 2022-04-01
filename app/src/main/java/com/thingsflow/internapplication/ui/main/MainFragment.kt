@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,13 +23,14 @@ class MainFragment : Fragment() {
     private val binding get() = _binding!!
     @Inject
     lateinit var issueAdapter: IssueAdapter
-    private val viewModel: MainViewModel by viewModels()
+    private val viewModel: MainViewModel by activityViewModels<MainViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = MainFragmentBinding.inflate(inflater, container, false)
+
         return binding.root
     }
 
@@ -46,6 +48,13 @@ class MainFragment : Fragment() {
             adapter = issueAdapter
         }
         observe()
+
+        binding.title.setOnClickListener(View.OnClickListener {
+            // 다른 Repository를 입력받을 수 있는 팝업 입력창 띄움
+            val dialog = InputDialog.newInstance()
+//            dialog.
+            dialog.show(parentFragmentManager, "InputDialog")
+        })
     }
 
     private fun observe() = with(viewModel) {

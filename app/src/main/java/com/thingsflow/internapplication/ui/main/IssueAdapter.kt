@@ -1,11 +1,16 @@
 package com.thingsflow.internapplication.ui.main
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.*
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.NavigationUI.setupActionBarWithNavController
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.thingsflow.internapplication.R
 import com.thingsflow.internapplication.databinding.ItemIssueBinding
 import javax.inject.Inject
 
@@ -16,9 +21,13 @@ class IssueAdapter @Inject constructor() : ListAdapter<Issue, IssueAdapter.ViewH
         const val URL_WEBPAGE = "https://thingsflow.com/ko/home"
     }
 
+    lateinit var parentView: ViewGroup
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding: ItemIssueBinding = ItemIssueBinding.inflate(layoutInflater, parent, false)
+
+        parentView = parent
 
         return ViewHolder(binding)
     }
@@ -35,18 +44,24 @@ class IssueAdapter @Inject constructor() : ListAdapter<Issue, IssueAdapter.ViewH
         }
 
         val issue = getItem(idx)
-        holder.bind("#${issue.number}: ${issue.title}")
+        holder.bind(issue.title, issue.number, idx)
     }
 
     inner class ViewHolder(private val binding: ItemIssueBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(issueText: String) {
+        fun bind(issueTitle: String, issueNumber: Int, issueIdx: Int) {
             with(binding) {
                 root.removeView(binding.bannerImg)
-                this.issueText.setText(issueText)
 
-                this.issueText.setOnClickListener(View.OnClickListener {
-                    // TODO: 이슈 상세 화면으로 이동
-                })
+                with(binding) {
+                    issueText.setText("#${issueNumber}: ${issueTitle}")
+                    issueText.setOnClickListener(View.OnClickListener {
+                        val navDirection: NavDirections = MainFragmentDirections.actionMainFragmentToDetailFragment(issueIdx)
+                        val navController = root.findNavController()
+                        // TODO: 상단 바 제목 안바뀜
+                        navController.currentDestination?.label = "#${issueNumber}"
+                        navController.navigate(navDirection)
+                    })
+                }
             }
         }
 
