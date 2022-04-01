@@ -21,8 +21,6 @@ class IssueListAdapter @Inject constructor() :
         holder.bind(currentList[position])
     }
 
-
-
     inner class IssueListViewHolder(private val binding: IssueItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: IssueData) {
@@ -33,7 +31,5 @@ class IssueListAdapter @Inject constructor() :
                 Navigation.findNavController(it).navigate(R.id.action_main_to_detail)
             }
         }
-
     }
-
 }
