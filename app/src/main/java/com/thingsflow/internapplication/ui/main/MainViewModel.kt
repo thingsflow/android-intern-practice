@@ -4,8 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.thingsflow.internapplication.data.IssueData
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class MainViewModel : ViewModel() {
+@HiltViewModel
+class MainViewModel @Inject constructor(): ViewModel() {
     // TODO: Implement the ViewModel
 
     private val _issueList = MutableLiveData<ArrayList<IssueData>>()

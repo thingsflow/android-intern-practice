@@ -1,7 +1,10 @@
 package com.thingsflow.internapplication.ui.detail
 
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class IssueDetailViewModel : ViewModel() {
+@HiltViewModel
+class IssueDetailViewModel @Inject constructor(): ViewModel() {
 
 }

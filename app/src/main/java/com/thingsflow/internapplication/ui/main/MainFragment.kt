@@ -12,7 +12,9 @@ import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import com.thingsflow.internapplication.R
 import com.thingsflow.internapplication.databinding.MainFragmentBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainFragment : Fragment() {
 
     companion object {
