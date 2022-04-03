@@ -21,7 +21,7 @@ class MainFragment : Fragment() {
     private var _binding: MainFragmentBinding? = null
     private val binding get() = _binding!!
     @Inject
-    private lateinit var issueAdapter: IssueAdapter
+    lateinit var issueAdapter: IssueAdapter
     private val viewModel: MainViewModel by viewModels()
 
     override fun onCreateView(
@@ -39,9 +39,7 @@ class MainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
-        // TODO: Use the ViewModel
         viewModel.changeTitle("google", "dagger")
         binding.issueRecyclerview.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)

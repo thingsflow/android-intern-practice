@@ -6,6 +6,6 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 
 interface RetrofitAPI {
-    @GET("/{org}/{repo}/issues")
+    @GET("{org}/{repo}/issues")
     fun getIssues(@Path("org") org: String, @Path("repo") repo: String) : Single<List<Issue>>
 }
