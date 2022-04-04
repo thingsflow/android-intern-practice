@@ -1,10 +1,14 @@
 package com.thingsflow.internapplication.ui.main
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,13 +26,14 @@ class MainFragment : Fragment() {
     private val binding get() = _binding!!
     @Inject
     lateinit var issueAdapter: IssueAdapter
-    private val viewModel: MainViewModel by viewModels()
+    private val viewModel: MainViewModel by activityViewModels<MainViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = MainFragmentBinding.inflate(inflater, container, false)
+
         return binding.root
     }
 
@@ -40,12 +45,17 @@ class MainFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.changeTitle("google", "dagger")
         binding.issueRecyclerview.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             adapter = issueAdapter
         }
         observe()
+
+        binding.title.setOnClickListener(View.OnClickListener {
+            // 다른 Repository를 입력받을 수 있는 팝업 입력창 띄움
+            val dialog = InputDialog.newInstance()
+            dialog.show(parentFragmentManager, "InputDialog")
+        })
     }
 
     private fun observe() = with(viewModel) {
@@ -60,6 +70,21 @@ class MainFragment : Fragment() {
         issues.observe(viewLifecycleOwner, Observer {
             issueAdapter.submitList(it)
         })
+
+        loadingError.observe(viewLifecycleOwner, Observer {
+            if (it) {
+                showAlertDialog("입력 오류", "입력한 Repository를 조회할 수 없습니다.")
+            }
+        })
     }
 
+    fun showAlertDialog(title: String, message: String) {
+        val alertDialog = AlertDialog.Builder(context)
+            .setTitle(title)
+            .setMessage(message)
+            .setPositiveButton("OK", null)
+            .create()
+
+        alertDialog.show()
+    }
 }

@@ -3,4 +3,6 @@
     <dimen name="title">30sp</dimen>
     <dimen name="issue_item">20sp</dimen>
     <dimen name="default_margin">20dp</dimen>
+    <dimen name="profile_name">25sp</dimen>
+    <dimen name="profile_image">50dp</dimen>
 </resources>
