@@ -1,4 +1,4 @@
-package com.thingsflow.internapplication.ui.main
+package com.thingsflow.internapplication.data
 
 import com.google.gson.annotations.SerializedName
 

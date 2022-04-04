@@ -1,6 +1,7 @@
 package com.thingsflow.internapplication.ui.main
 
 import com.thingsflow.internapplication.RetrofitAPI
+import com.thingsflow.internapplication.data.Issue
 import io.reactivex.rxjava3.core.Single
 import javax.inject.Inject
 

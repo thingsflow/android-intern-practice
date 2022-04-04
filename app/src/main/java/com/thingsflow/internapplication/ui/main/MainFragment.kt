@@ -1,15 +1,12 @@
 package com.thingsflow.internapplication.ui.main
 
 import android.app.AlertDialog
-import android.content.DialogInterface
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.thingsflow.internapplication.databinding.MainFragmentBinding
@@ -60,11 +57,11 @@ class MainFragment : Fragment() {
 
     private fun observe() = with(viewModel) {
         orgName.observe(viewLifecycleOwner, Observer {
-            binding.orgName.setText(it)
+            binding.orgName.text = it
         })
 
         repoName.observe(viewLifecycleOwner, Observer {
-            binding.repoName.setText(it)
+            binding.repoName.text = it
         })
 
         issues.observe(viewLifecycleOwner, Observer {
@@ -78,7 +75,7 @@ class MainFragment : Fragment() {
         })
     }
 
-    fun showAlertDialog(title: String, message: String) {
+    private fun showAlertDialog(title: String, message: String) {
         val alertDialog = AlertDialog.Builder(context)
             .setTitle(title)
             .setMessage(message)

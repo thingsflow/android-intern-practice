@@ -1,6 +1,6 @@
 package com.thingsflow.internapplication
 
-import com.thingsflow.internapplication.ui.main.Issue
+import com.thingsflow.internapplication.data.Issue
 import io.reactivex.rxjava3.core.Single
 import retrofit2.http.GET
 import retrofit2.http.Path

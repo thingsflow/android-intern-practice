@@ -1,28 +1,20 @@
 package com.thingsflow.internapplication.ui.main
 
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.*
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.NavigationUI.setupActionBarWithNavController
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.thingsflow.internapplication.R
+import com.thingsflow.internapplication.data.Issue
 import com.thingsflow.internapplication.databinding.ItemIssueBinding
-import dagger.hilt.android.qualifiers.ActivityContext
 import javax.inject.Inject
 
-class IssueAdapter @Inject constructor(@ActivityContext private val context: Context) : ListAdapter<Issue, IssueAdapter.ViewHolder>(IssueDiffCallback) {
+class IssueAdapter @Inject constructor() : ListAdapter<Any, IssueAdapter.ViewHolder>(IssueDiffCallback) {
     companion object {
-        const val POS_BANNER = 4
-        const val URL_BANNER = "https://s3.ap-northeast-2.amazonaws.com/hellobot-kr-test/image/main_logo.png"
         const val URL_WEBPAGE = "https://thingsflow.com/ko/home"
     }
 
@@ -38,18 +30,13 @@ class IssueAdapter @Inject constructor(@ActivityContext private val context: Con
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        if (position == POS_BANNER) {
-            holder.bindImage(URL_BANNER)
-            return
-        }
+        val item = getItem(position)
 
-        var idx = position
-        if (position > POS_BANNER) {
-            idx = position - 1
+        if (item is String) {
+            holder.bindImage(item)
+        } else if (item is Issue) {
+            holder.bind(item.title, item.number, position)
         }
-
-        val issue = getItem(idx)
-        holder.bind(issue.title, issue.number, idx)
     }
 
     inner class ViewHolder(private val binding: ItemIssueBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -58,7 +45,7 @@ class IssueAdapter @Inject constructor(@ActivityContext private val context: Con
                 root.removeView(binding.bannerImg)
 
                 with(binding) {
-                    issueText.setText("#${issueNumber}: ${issueTitle}")
+                    issueText.text = "#${issueNumber}: $issueTitle"
                     issueText.setOnClickListener(View.OnClickListener {
                         val navDirection: NavDirections = MainFragmentDirections.actionMainFragmentToDetailFragment(issueIdx)
                         val navController = root.findNavController()
@@ -79,7 +66,7 @@ class IssueAdapter @Inject constructor(@ActivityContext private val context: Con
                 bannerImg.setOnClickListener(View.OnClickListener {
                     // 웹페이지 링크 열기
                     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(URL_WEBPAGE))
-                    context.startActivity(intent)
+                    binding.root.context.startActivity(intent)
                 })
             }
         }
