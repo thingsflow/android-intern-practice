@@ -18,7 +18,7 @@ class IssueAdapter @Inject constructor() : ListAdapter<Any, IssueAdapter.ViewHol
         const val URL_WEBPAGE = "https://thingsflow.com/ko/home"
     }
 
-    lateinit var parentView: ViewGroup
+    private lateinit var parentView: ViewGroup
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
