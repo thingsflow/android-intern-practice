@@ -32,19 +32,12 @@ class MainViewModel @Inject constructor(private val issueRepository: IssueReposi
     }
 
     fun setIssueList(){
-
-        _issueList.value = ArrayList()
-
-//        //test data
-//        for (i in 1..10){
-//            _issueList.value?.add(IssueData(i, "the title of the issue"))
-//        }
         issueRepository.getIssues()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe ({
                 Log.d("getIssue", "success")
-                _issueList.value = ArrayList(it)
+                _issueList.value = it
             }, {
                 Log.d("getIssue", "fail : ${it.message}")
             })
