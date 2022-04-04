@@ -43,7 +43,6 @@ class MainViewModel @Inject constructor(
                     _issues.value = ArrayList(it)
                     if (_issues.value!!.size > POS_BANNER) {
                         _issues.value!!.add(POS_BANNER, URL_BANNER)
-                        Log.d("MainViewModel DEBUG", _issues.value!!.get(4).toString())
                     }
                     setOrgName(orgName)
                     setRepoName(repoName)
