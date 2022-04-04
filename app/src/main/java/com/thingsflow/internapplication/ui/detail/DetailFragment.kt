@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -51,6 +52,8 @@ class DetailFragment : Fragment() {
             Log.e("Null Error", "Detail argument issue is null")
             return
         }
+
+        (activity as AppCompatActivity).supportActionBar?.title = "#${issue.number}"
 
         with(binding) {
             Glide.with(root.context)

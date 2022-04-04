@@ -54,7 +54,6 @@ class MainFragment : Fragment() {
         binding.title.setOnClickListener(View.OnClickListener {
             // 다른 Repository를 입력받을 수 있는 팝업 입력창 띄움
             val dialog = InputDialog.newInstance()
-//            dialog.
             dialog.show(parentFragmentManager, "InputDialog")
         })
     }
@@ -83,7 +82,7 @@ class MainFragment : Fragment() {
         val alertDialog = AlertDialog.Builder(context)
             .setTitle(title)
             .setMessage(message)
-            .setPositiveButton("OK", DialogInterface.OnClickListener { dialogInterface, i ->  Toast.makeText(context, "a", Toast.LENGTH_SHORT)})
+            .setPositiveButton("OK", null)
             .create()
 
         alertDialog.show()
