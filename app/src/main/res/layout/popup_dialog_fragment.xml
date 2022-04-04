@@ -34,5 +34,11 @@
         app:layout_constraintTop_toBottomOf="@+id/organizationInput"
         app:layout_constraintStart_toEndOf="@+id/repositoryGuide"/>
 
-
+    <Button
+        android:id="@+id/submitBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="set title"
+        app:layout_constraintTop_toBottomOf="@id/repositoryInput"
+        app:layout_constraintStart_toStartOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

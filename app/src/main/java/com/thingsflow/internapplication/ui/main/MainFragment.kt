@@ -52,12 +52,17 @@ class MainFragment : Fragment() {
         repositoryTextView = binding.repositoryName
         issueRecyclerView = binding.issueList
 
+        val title = binding.title
+        title.setOnClickListener {
+            showDialog()
+        }
+
         issueRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         issueRecyclerView.adapter = issueListAdapter
 
         viewModel.setOrganization("google")
         viewModel.setRepository("dagger")
-        viewModel.setIssueList()
+        viewModel.setIssueList("google", "dagger")
 
         observe()
     }
@@ -72,5 +77,10 @@ class MainFragment : Fragment() {
         issueList.observe(viewLifecycleOwner, Observer {
             issueListAdapter.submitList(it)
         })
+    }
+
+    private fun showDialog() {
+        val dialog = ChangeTitleDialog()
+        dialog.show(childFragmentManager, "ChangeTitleDialog")
     }
 }

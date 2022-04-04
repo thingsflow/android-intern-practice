@@ -31,8 +31,9 @@ class MainViewModel @Inject constructor(private val issueRepository: IssueReposi
         _repository.value = repository
     }
 
-    fun setIssueList(){
-        issueRepository.getIssues()
+    fun setIssueList(organization: String, repository: String){
+        Log.d("setIssueList", "set issue")
+        issueRepository.getIssues(organization, repository)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe ({

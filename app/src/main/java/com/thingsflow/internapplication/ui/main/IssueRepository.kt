@@ -11,8 +11,8 @@ import javax.inject.Inject
 
 class IssueRepository @Inject constructor(private val retrofitInstance: GitHubApi) {
 
-    fun getIssues(): Observable<ArrayList<IssueData>> {
+    fun getIssues(organization: String, repository: String): Observable<ArrayList<IssueData>> {
 
-        return retrofitInstance.getIssue()
+        return retrofitInstance.getIssue(organization, repository)
     }
 }
