@@ -9,7 +9,6 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.thingsflow.internapplication.R
 import com.thingsflow.internapplication.data.IssueData
 import com.thingsflow.internapplication.databinding.IssueItemBinding
 import javax.inject.Inject
@@ -29,18 +28,22 @@ class IssueListAdapter @Inject constructor() :
         if(position == POS){
             holder.bindBanner()
         }
+        else if(position < POS){
+            holder.bind(currentList[position], position)
+        }
         else{
-            holder.bind(currentList[position])
+            holder.bind(currentList[position - 1], (position - 1))
         }
     }
 
     inner class IssueListViewHolder(private val binding: IssueItemBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: IssueData) {
-            binding.issueNum.text = "#" + item.issueNum.toString() + ": "
+        fun bind(item: IssueData, position: Int) {
+            binding.issueNum.text = "#${item.issueNum.toString()}: "
             binding.issueTitle.text = item.issueTitle
 
             binding.root.setOnClickListener{
-                Navigation.findNavController(it).navigate(R.id.action_main_to_detail)
+                val action = MainFragmentDirections.actionMainToDetail(position)
+                Navigation.findNavController(it).navigate(action)
             }
         }
 
