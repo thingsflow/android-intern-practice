@@ -21,7 +21,7 @@
             android:id="@+id/org_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="google"
+            android:text="Organization"
             android:textColor="@color/black"
             android:textSize="@dimen/title"
             android:textStyle="bold" />
@@ -38,7 +38,7 @@
             android:id="@+id/repo_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="dagger"
+            android:text="Repository"
             android:textColor="@color/black"
             android:textSize="@dimen/title"
             android:textStyle="bold" />

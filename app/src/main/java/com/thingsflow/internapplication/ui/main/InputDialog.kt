@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.thingsflow.internapplication.databinding.InputDialogBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -17,7 +18,7 @@ class InputDialog : DialogFragment() {
 
     private var _binding: InputDialogBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: MainViewModel by viewModels()
+    private val viewModel: MainViewModel by activityViewModels<MainViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
