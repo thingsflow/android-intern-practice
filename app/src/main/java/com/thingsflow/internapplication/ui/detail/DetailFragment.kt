@@ -10,8 +10,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
+import com.thingsflow.internapplication.data.Item
 import com.thingsflow.internapplication.databinding.DetailFragmentBinding
-import com.thingsflow.internapplication.data.Issue
 import com.thingsflow.internapplication.ui.main.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -46,7 +46,7 @@ class DetailFragment : Fragment() {
         val issueIdx = args.issueIdx
 
         val arg: Any? = viewModel.issues.value?.get(issueIdx)
-        if (arg !is Issue) {
+        if (arg !is Item.Issue) {
             Log.e("Type Error", "Detail argument issue is not Issue type")
         }
         if (arg == null) {
@@ -54,7 +54,7 @@ class DetailFragment : Fragment() {
             return
         }
 
-        val issue: Issue = arg as Issue
+        val issue = arg as Item.Issue
 
         (activity as AppCompatActivity).supportActionBar?.title = "#${issue.number}"
 

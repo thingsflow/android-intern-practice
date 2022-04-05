@@ -9,11 +9,11 @@ import androidx.navigation.*
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.thingsflow.internapplication.data.Issue
+import com.thingsflow.internapplication.data.Item
 import com.thingsflow.internapplication.databinding.ItemIssueBinding
 import javax.inject.Inject
 
-class IssueAdapter @Inject constructor() : ListAdapter<Any, IssueAdapter.ViewHolder>(IssueDiffCallback) {
+class IssueAdapter @Inject constructor() : ListAdapter<Item, IssueAdapter.ViewHolder>(ItemDiffCallback) {
     companion object {
         const val URL_WEBPAGE = "https://thingsflow.com/ko/home"
     }
@@ -30,12 +30,9 @@ class IssueAdapter @Inject constructor() : ListAdapter<Any, IssueAdapter.ViewHol
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = getItem(position)
-
-        if (item is String) {
-            holder.bindImage(item)
-        } else if (item is Issue) {
-            holder.bind(item.title, item.number, position)
+        when(val item = getItem(position)) {
+            is Item.Issue -> holder.bind(item.title, item.number, position)
+            is Item.Image -> holder.bindImage(item.url)
         }
     }
 

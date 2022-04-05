@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.thingsflow.internapplication.data.Item
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -13,8 +14,8 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val mainRepository: MainRepository
 ) : ViewModel() {
-    private val _issues = MutableLiveData<ArrayList<Any>>()
-    val issues: LiveData<ArrayList<Any>> = _issues
+    private val _issues = MutableLiveData<ArrayList<Item>>()
+    val issues: LiveData<ArrayList<Item>> = _issues
     private val _orgName = MutableLiveData<String>()
     val orgName: LiveData<String> = _orgName
     private val _repoName = MutableLiveData<String>()
@@ -40,10 +41,12 @@ class MainViewModel @Inject constructor(
                 {
                     Log.d("SUCCESS: Get issue", "${it.size}")
 
-                    _issues.value = ArrayList(it)
-                    if (_issues.value!!.size > POS_BANNER) {
-                        _issues.value!!.add(POS_BANNER, URL_BANNER)
+                    val list: MutableList<Item> = it.toMutableList()
+                    if (list.size >= POS_BANNER) {
+                        list.add(POS_BANNER, Item.Image(URL_BANNER))
                     }
+                    _issues.value = ArrayList(list)
+
                     setOrgName(orgName)
                     setRepoName(repoName)
                     _loadingError.value = false

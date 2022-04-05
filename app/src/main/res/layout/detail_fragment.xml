@@ -7,36 +7,46 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
-    <ImageView
-        android:id="@+id/profile_iv"
-        android:layout_width="@dimen/profile_image"
-        android:layout_height="@dimen/profile_image"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:clipToOutline="true"
-        android:background="@drawable/bg_profile"/>
-
-    <TextView
-        android:id="@+id/profile_name_tv"
+    <LinearLayout
+        android:id="@+id/profile"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/profile_iv"
-        app:layout_constraintBottom_toBottomOf="@+id/profile_iv"
-        android:layout_marginLeft="@dimen/default_margin"
-        android:text="Dayun Cha"
-        android:textSize="@dimen/profile_name"
-        android:textColor="@color/black"
-        android:textStyle="bold"/>
+        android:gravity="center_vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        android:id="@+id/issue_body_tv"
+        <ImageView
+            android:id="@+id/profile_iv"
+            android:layout_width="@dimen/profile_image"
+            android:layout_height="@dimen/profile_image"
+
+            android:background="@drawable/bg_profile"
+            android:clipToOutline="true" />
+
+        <TextView
+            android:id="@+id/profile_name_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/default_margin"
+            android:text="Dayun Cha"
+            android:textColor="@color/black"
+            android:textSize="@dimen/profile_name"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <ScrollView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/profile_iv"
-        android:layout_marginTop="@dimen/default_margin"
-        android:text="blabla"/>
+        app:layout_constraintTop_toBottomOf="@id/profile"
+        android:layout_marginTop="@dimen/default_margin">
+        <TextView
+            android:id="@+id/issue_body_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="blabla"/>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
