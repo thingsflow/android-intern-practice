@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.Group
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -52,13 +51,9 @@ class MainFragment : Fragment() {
 
         (activity as AppCompatActivity).supportActionBar?.title = getString(R.string.app_name)
 
-        organizationTextView = binding.organizationName
-        repositoryTextView = binding.repositoryName
         issueRecyclerView = binding.issueList
 
-        //viewModel.setIssueList("google", "dagger")
-
-        binding.title.setGroupOnClickListener {
+        binding.title.setOnClickListener {
             showChangeTitleDialog()
         }
 
@@ -69,11 +64,8 @@ class MainFragment : Fragment() {
     }
 
     private fun observe() = with(viewModel) {
-        organization.observe(viewLifecycleOwner, Observer {
-            organizationTextView.text = it
-        })
-        repository.observe(viewLifecycleOwner, Observer {
-            repositoryTextView.text = it
+        repositoryInfo.observe(viewLifecycleOwner, Observer {
+            binding.title.text = "${it.organization} / ${it.repository}"
         })
         issueList.observe(viewLifecycleOwner, Observer {
             issueListAdapter.submitList(it)
@@ -93,11 +85,5 @@ class MainFragment : Fragment() {
     private fun showErrorDialog() {
         val dialog = ErrorDialog()
         dialog.show(childFragmentManager, "ErrorDialog")
-    }
-
-    private fun Group.setGroupOnClickListener(listener: View.OnClickListener){
-        referencedIds.forEach {
-            rootView.findViewById<View>(it).setOnClickListener(listener)
-        }
     }
 }

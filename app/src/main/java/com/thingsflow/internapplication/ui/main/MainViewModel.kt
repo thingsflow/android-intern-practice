@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.thingsflow.internapplication.data.Item
+import com.thingsflow.internapplication.data.RepositoryInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -19,11 +20,8 @@ class MainViewModel @Inject constructor(private val issueRepository: IssueReposi
     private val _issueList = MutableLiveData<ArrayList<Item>>()
     val issueList : LiveData<ArrayList<Item>> = _issueList
 
-    private val _organization = MutableLiveData<String>()
-    val organization : LiveData<String> = _organization
-
-    private val _repository = MutableLiveData<String>()
-    val repository : LiveData<String> = _repository
+    private val _repositoryInfo = MutableLiveData<RepositoryInfo>()
+    val repositoryInfo : LiveData<RepositoryInfo> = _repositoryInfo
 
     private val _issueDetail = MutableLiveData<Item.IssueData>()
     val issueDetail : LiveData<Item.IssueData> = _issueDetail
@@ -34,21 +32,15 @@ class MainViewModel @Inject constructor(private val issueRepository: IssueReposi
     private val _errorMsg = MutableLiveData<String>()
     val errorMsg : LiveData<String> = _errorMsg
 
-
-    fun setOrganization(organization: String){
-        _organization.value = organization
-    }
-
-    fun setRepository(repository: String){
-        _repository.value = repository
+    private fun setRepositoryInfo(organization: String, repository: String){
+        _repositoryInfo.value = RepositoryInfo(organization, repository)
     }
 
     fun setIssueList(organization: String, repository: String){
 
         var itemList: ArrayList<Item>
 
-        setOrganization(organization)
-        setRepository(repository)
+        setRepositoryInfo(organization, repository)
 
         issueRepository.getIssues(organization, repository)
             .subscribeOn(Schedulers.io())
