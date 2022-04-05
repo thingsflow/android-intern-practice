@@ -50,9 +50,7 @@ class MainFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        (activity as AppCompatActivity).supportActionBar?.setTitle(
-            getString(R.string.app_name)
-        )
+        (activity as AppCompatActivity).supportActionBar?.title = getString(R.string.app_name)
 
         organizationTextView = binding.organizationName
         repositoryTextView = binding.repositoryName
@@ -87,7 +85,7 @@ class MainFragment : Fragment() {
         dialog.show(childFragmentManager, "ChangeTitleDialog")
     }
 
-    fun Group.setGroupOnClickListener(listener: View.OnClickListener){
+    private fun Group.setGroupOnClickListener(listener: View.OnClickListener){
         referencedIds.forEach {
             rootView.findViewById<View>(it).setOnClickListener(listener)
         }

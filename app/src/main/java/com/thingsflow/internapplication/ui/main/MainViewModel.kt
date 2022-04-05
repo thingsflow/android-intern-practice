@@ -52,7 +52,10 @@ class MainViewModel @Inject constructor(private val issueRepository: IssueReposi
                 Log.d("getIssue", "success")
 
                 itemList = ArrayList(it)
-                itemList.add(POS, Item.Image(BANNER_IMG_URL))
+
+                if(itemList.size >= POS){
+                    itemList.add(POS, Item.Image(BANNER_IMG_URL))
+                }
 
                 _issueList.value = itemList
             }, {
