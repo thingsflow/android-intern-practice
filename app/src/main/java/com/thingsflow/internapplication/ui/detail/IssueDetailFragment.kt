@@ -1,6 +1,5 @@
 package com.thingsflow.internapplication.ui.detail
 
-import android.app.ActionBar
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +7,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.thingsflow.internapplication.databinding.IssueDetailFragmentBinding
@@ -42,27 +42,30 @@ class IssueDetailFragment : Fragment() {
         val args: IssueDetailFragmentArgs by navArgs()
         val issuePos = args.issuePosition
 
-        val issueNumber = viewModel.issueList.value?.get(issuePos)?.issueNum
-        val userID = viewModel.issueList.value?.get(issuePos)?.userInfo?.userId
-        val userProfileURL = viewModel.issueList.value?.get(issuePos)?.userInfo?.userProfile
-        val issueBody = viewModel.issueList.value?.get(issuePos)?.issueBody
+        viewModel.setIssueDetail(issuePos)
 
-        (activity as AppCompatActivity).supportActionBar?.setTitle(
-            "#${issueNumber.toString()}"
-        )
-
-        Glide.with(binding.root)
-            .load(userProfileURL)
-            .into(binding.userProfile)
-
-        binding.userId.text = userID
-        binding.body.text = issueBody
-
+        observe()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun observe() = with(viewModel){
+        issueDetail.observe(viewLifecycleOwner, Observer {
+            Glide.with(binding.root)
+                .load(it.userInfo.userProfile)
+                .into(binding.userProfile)
+
+            binding.userId.text = it.userInfo.userId
+            binding.body.text = it.issueBody
+
+            (activity as AppCompatActivity).supportActionBar?.setTitle(
+                "#${it.issueNum}"
+            )
+
+        })
     }
 }
 

@@ -9,15 +9,13 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.thingsflow.internapplication.data.IssueData
+import com.thingsflow.internapplication.data.Item
 import com.thingsflow.internapplication.databinding.IssueItemBinding
 import javax.inject.Inject
 
 class IssueListAdapter @Inject constructor() :
-    ListAdapter<IssueData, IssueListAdapter.IssueListViewHolder>(IssueListCallBack) {
+    ListAdapter<Item, IssueListAdapter.IssueListViewHolder>(IssueListCallBack) {
 
-    private val BANNER_IMG_URL = "https://s3.ap-northeast-2.amazonaws.com/hellobot-kr-test/image/main_logo.png"
-    private val POS = 4
     private val HOME_PAGE_URL = "https://thingsflow.com/ko/home"
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IssueListViewHolder {
@@ -25,19 +23,16 @@ class IssueListAdapter @Inject constructor() :
     }
 
     override fun onBindViewHolder(holder: IssueListViewHolder, position: Int) {
-        if(position == POS){
-            holder.bindBanner()
+        if(currentList[position] is Item.IssueData){
+            holder.bind(currentList[position] as Item.IssueData, position)
         }
-        else if(position < POS){
-            holder.bind(currentList[position], position)
-        }
-        else{
-            holder.bind(currentList[position - 1], (position - 1))
+        else if(currentList[position] is Item.Image){
+            holder.bindBanner(currentList[position] as Item.Image)
         }
     }
 
     inner class IssueListViewHolder(private val binding: IssueItemBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: IssueData, position: Int) {
+        fun bind(item: Item.IssueData, position: Int) {
             binding.issueNum.text = "#${item.issueNum.toString()}: "
             binding.issueTitle.text = item.issueTitle
 
@@ -47,9 +42,9 @@ class IssueListAdapter @Inject constructor() :
             }
         }
 
-        fun bindBanner(){
+        fun bindBanner(item: Item.Image){
             Glide.with(binding.root)
-                .load(BANNER_IMG_URL)
+                .load(item.url)
                 .into(binding.bannerImg)
 
             binding.issueNum.visibility = View.INVISIBLE

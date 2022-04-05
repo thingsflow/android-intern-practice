@@ -1,16 +1,18 @@
 package com.thingsflow.internapplication.ui.main
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.Group
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.thingsflow.internapplication.R
 import com.thingsflow.internapplication.databinding.MainFragmentBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -48,12 +50,15 @@ class MainFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        (activity as AppCompatActivity).supportActionBar?.setTitle(
+            getString(R.string.app_name)
+        )
+
         organizationTextView = binding.organizationName
         repositoryTextView = binding.repositoryName
         issueRecyclerView = binding.issueList
 
-        val title = binding.title
-        title.setOnClickListener {
+        binding.title.setGroupOnClickListener {
             showDialog()
         }
 
@@ -82,5 +87,11 @@ class MainFragment : Fragment() {
     private fun showDialog() {
         val dialog = ChangeTitleDialog()
         dialog.show(childFragmentManager, "ChangeTitleDialog")
+    }
+
+    fun Group.setGroupOnClickListener(listener: View.OnClickListener){
+        referencedIds.forEach {
+            rootView.findViewById<View>(it).setOnClickListener(listener)
+        }
     }
 }

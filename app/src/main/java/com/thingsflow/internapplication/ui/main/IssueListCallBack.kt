@@ -1,14 +1,14 @@
 package com.thingsflow.internapplication.ui.main
 
 import androidx.recyclerview.widget.DiffUtil
-import com.thingsflow.internapplication.data.IssueData
+import com.thingsflow.internapplication.data.Item
 
-object IssueListCallBack : DiffUtil.ItemCallback<IssueData>() {
-    override fun areItemsTheSame(oldItem: IssueData, newItem: IssueData): Boolean {
-        return oldItem.issueNum == newItem.issueNum
+object IssueListCallBack : DiffUtil.ItemCallback<Item>() {
+    override fun areItemsTheSame(oldItem: Item, newItem: Item): Boolean {
+        return oldItem == newItem
     }
 
-    override fun areContentsTheSame(oldItem: IssueData, newItem: IssueData): Boolean {
+    override fun areContentsTheSame(oldItem: Item, newItem: Item): Boolean {
         return oldItem == newItem
     }
 }

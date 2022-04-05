@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.thingsflow.internapplication.data.IssueData
+import com.thingsflow.internapplication.data.Item
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -13,15 +13,20 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(private val issueRepository: IssueRepository): ViewModel() {
     // TODO: Implement the ViewModel
+    private val BANNER_IMG_URL = "https://s3.ap-northeast-2.amazonaws.com/hellobot-kr-test/image/main_logo.png"
+    private val POS = 4
 
-    private val _issueList = MutableLiveData<ArrayList<IssueData>>()
-    val issueList : LiveData<ArrayList<IssueData>> = _issueList
+    private val _issueList = MutableLiveData<ArrayList<Item>>()
+    val issueList : LiveData<ArrayList<Item>> = _issueList
 
     private val _organization = MutableLiveData<String>()
     val organization : LiveData<String> = _organization
 
     private val _repository = MutableLiveData<String>()
     val repository : LiveData<String> = _repository
+
+    private val _issueDetail = MutableLiveData<Item.IssueData>()
+    val issueDetail : LiveData<Item.IssueData> = _issueDetail
 
     fun setOrganization(organization: String){
         _organization.value = organization
@@ -32,15 +37,27 @@ class MainViewModel @Inject constructor(private val issueRepository: IssueReposi
     }
 
     fun setIssueList(organization: String, repository: String){
-        Log.d("setIssueList", "set issue")
+
+        var itemList: ArrayList<Item>
+
         issueRepository.getIssues(organization, repository)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe ({
                 Log.d("getIssue", "success")
-                _issueList.value = it
+
+                itemList = ArrayList(it)
+                itemList.add(POS, Item.Image(BANNER_IMG_URL))
+
+                _issueList.value = itemList
             }, {
                 Log.d("getIssue", "fail : ${it.message}")
             })
+
+
+    }
+
+    fun setIssueDetail(index: Int){
+        _issueDetail.value = issueList.value?.get(index) as Item.IssueData?
     }
 }
