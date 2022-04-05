@@ -1,5 +1,6 @@
 package com.thingsflow.internapplication.ui.main
 
+import android.text.Editable
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -28,6 +29,7 @@ class MainViewModel @Inject constructor(private val issueRepository: IssueReposi
     private val _issueDetail = MutableLiveData<Item.IssueData>()
     val issueDetail : LiveData<Item.IssueData> = _issueDetail
 
+
     fun setOrganization(organization: String){
         _organization.value = organization
     }
@@ -39,6 +41,9 @@ class MainViewModel @Inject constructor(private val issueRepository: IssueReposi
     fun setIssueList(organization: String, repository: String){
 
         var itemList: ArrayList<Item>
+
+        setOrganization(organization)
+        setRepository(repository)
 
         issueRepository.getIssues(organization, repository)
             .subscribeOn(Schedulers.io())

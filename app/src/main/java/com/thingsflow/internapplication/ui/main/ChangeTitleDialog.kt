@@ -5,12 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.activityViewModels
 import com.thingsflow.internapplication.databinding.PopupDialogFragmentBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ChangeTitleDialog: DialogFragment() {
 
+    private val viewModel: MainViewModel by activityViewModels()
     private var _binding: PopupDialogFragmentBinding? = null
     private val binding get() = _binding!!
 
@@ -21,15 +23,24 @@ class ChangeTitleDialog: DialogFragment() {
     ): View? {
         _binding = PopupDialogFragmentBinding.inflate(inflater, container, false)
 
-        binding.submitBtn.setOnClickListener {
-            // TODO : set organization and repository
-        }
-
         return binding.root
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.submitBtn.setOnClickListener {
+            val orgInput = binding.organizationInput.text.toString()
+            val repoInput = binding.repositoryInput.text.toString()
+
+            viewModel.setIssueList(orgInput, repoInput)
+
+            dismiss()
+        }
     }
 }

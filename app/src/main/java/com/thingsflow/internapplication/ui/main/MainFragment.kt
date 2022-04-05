@@ -58,16 +58,14 @@ class MainFragment : Fragment() {
         repositoryTextView = binding.repositoryName
         issueRecyclerView = binding.issueList
 
+        viewModel.setIssueList("google", "dagger")
+
         binding.title.setGroupOnClickListener {
             showDialog()
         }
 
         issueRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         issueRecyclerView.adapter = issueListAdapter
-
-        viewModel.setOrganization("google")
-        viewModel.setRepository("dagger")
-        viewModel.setIssueList("google", "dagger")
 
         observe()
     }
