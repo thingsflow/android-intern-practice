@@ -8,6 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.NavDirections
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.thingsflow.internapplication.databinding.MainFragmentBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -73,6 +76,17 @@ class MainFragment : Fragment() {
                 showAlertDialog("입력 오류", "입력한 Repository를 조회할 수 없습니다.")
             }
         })
+
+        eventStartDetailActivity.observeEvent(viewLifecycleOwner, Observer {
+            navigateToDetailFragment()
+        })
+    }
+
+    private fun navigateToDetailFragment() {
+        val navDirection: NavDirections = MainFragmentDirections.actionMainFragmentToDetailFragment()
+        val navController = findNavController()
+
+        navController.navigate(navDirection)
     }
 
     private fun showAlertDialog(title: String, message: String) {

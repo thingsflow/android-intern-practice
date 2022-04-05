@@ -22,6 +22,10 @@ class MainViewModel @Inject constructor(
     val repoName: LiveData<String> = _repoName
     private val _loadingError = MutableLiveData<Boolean>()
     val loadingError: LiveData<Boolean> = _loadingError
+    private val _selectedIssue = MutableLiveData<Item.Issue>()
+    val selectedIssue = _selectedIssue
+    private val _eventStartDetailActivity = MutableLiveData<Event<Unit>>()
+    val eventStartDetailActivity: LiveData<Event<Unit>> = _eventStartDetailActivity
 
     companion object {
         const val POS_BANNER = 4
@@ -64,5 +68,10 @@ class MainViewModel @Inject constructor(
 
     fun changeTitle(orgName: String, repoName: String) {
         loadIssues(orgName, repoName)
+    }
+
+    fun clickIssue(issueIdx: Int) {
+        _selectedIssue.value = issues.value?.get(issueIdx) as Item.Issue
+        _eventStartDetailActivity.value = Event(Unit)
     }
 }

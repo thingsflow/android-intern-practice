@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.contains
-import androidx.navigation.*
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -43,15 +42,10 @@ class IssueAdapter @Inject constructor() : ListAdapter<Item, IssueAdapter.ViewHo
                 root.removeView(binding.bannerImg)
                 if (!root.contains(binding.issueText)) root.addView(binding.issueText)
 
-                with(binding) {
-                    issueText.text = "#${issueNumber}: $issueTitle"
-                    issueText.setOnClickListener(View.OnClickListener {
-                        val navDirection: NavDirections = MainFragmentDirections.actionMainFragmentToDetailFragment(issueIdx)
-                        val navController = root.findNavController()
-
-                        navController.navigate(navDirection)
-                    })
-                }
+                issueText.text = "#${issueNumber}: $issueTitle"
+                issueText.setOnClickListener(View.OnClickListener {
+                    // TODO: viewModel.clickIssue(issueIdx)
+                })
             }
         }
 

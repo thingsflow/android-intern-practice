@@ -17,10 +17,6 @@
         android:id="@+id/detailFragment"
         android:label="Toolbar title"
         android:name="com.thingsflow.internapplication.ui.detail.DetailFragment"
-        tools:layout="@layout/detail_fragment">
-        <argument
-            android:name="issue_idx"
-            app:argType="integer"/>
-    </fragment>
+        tools:layout="@layout/detail_fragment"/>
 
 </navigation>
