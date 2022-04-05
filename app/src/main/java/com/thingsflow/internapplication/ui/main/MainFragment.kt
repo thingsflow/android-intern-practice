@@ -56,10 +56,10 @@ class MainFragment : Fragment() {
         repositoryTextView = binding.repositoryName
         issueRecyclerView = binding.issueList
 
-        viewModel.setIssueList("google", "dagger")
+        //viewModel.setIssueList("google", "dagger")
 
         binding.title.setGroupOnClickListener {
-            showDialog()
+            showChangeTitleDialog()
         }
 
         issueRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
@@ -78,11 +78,21 @@ class MainFragment : Fragment() {
         issueList.observe(viewLifecycleOwner, Observer {
             issueListAdapter.submitList(it)
         })
+        loadSuccess.observe(viewLifecycleOwner, Observer {
+            if(it == false){
+                showErrorDialog()
+            }
+        })
     }
 
-    private fun showDialog() {
+    private fun showChangeTitleDialog() {
         val dialog = ChangeTitleDialog()
         dialog.show(childFragmentManager, "ChangeTitleDialog")
+    }
+
+    private fun showErrorDialog() {
+        val dialog = ErrorDialog()
+        dialog.show(childFragmentManager, "ErrorDialog")
     }
 
     private fun Group.setGroupOnClickListener(listener: View.OnClickListener){

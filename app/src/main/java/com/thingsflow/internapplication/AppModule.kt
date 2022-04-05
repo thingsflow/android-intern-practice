@@ -18,13 +18,12 @@ object AppModule {
     @Singleton
     @Provides
     fun provideRetrofit(): Retrofit {
-        val retrofit = Retrofit.Builder()
+
+        return Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-
-        return retrofit
     }
 
     @Singleton

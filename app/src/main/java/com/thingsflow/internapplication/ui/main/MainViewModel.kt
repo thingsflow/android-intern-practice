@@ -1,6 +1,5 @@
 package com.thingsflow.internapplication.ui.main
 
-import android.text.Editable
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -28,6 +27,12 @@ class MainViewModel @Inject constructor(private val issueRepository: IssueReposi
 
     private val _issueDetail = MutableLiveData<Item.IssueData>()
     val issueDetail : LiveData<Item.IssueData> = _issueDetail
+
+    private val _loadSuccess = MutableLiveData<Boolean>()
+    val loadSuccess : LiveData<Boolean> = _loadSuccess
+
+    private val _errorMsg = MutableLiveData<String>()
+    val errorMsg : LiveData<String> = _errorMsg
 
 
     fun setOrganization(organization: String){
@@ -58,8 +63,11 @@ class MainViewModel @Inject constructor(private val issueRepository: IssueReposi
                 }
 
                 _issueList.value = itemList
+                _loadSuccess.value = true
             }, {
                 Log.d("getIssue", "fail : ${it.message}")
+                _loadSuccess.value = false
+                _errorMsg.value = it.message
             })
 
 

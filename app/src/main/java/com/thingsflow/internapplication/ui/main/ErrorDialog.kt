@@ -6,14 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
-import com.thingsflow.internapplication.databinding.ChangeTitleDialogFragmentBinding
+import com.thingsflow.internapplication.databinding.ErrorDialogFragmentBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ChangeTitleDialog: DialogFragment() {
+class ErrorDialog: DialogFragment(){
 
     private val viewModel: MainViewModel by activityViewModels()
-    private var _binding: ChangeTitleDialogFragmentBinding? = null
+    private var _binding: ErrorDialogFragmentBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -21,7 +21,7 @@ class ChangeTitleDialog: DialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = ChangeTitleDialogFragmentBinding.inflate(inflater, container, false)
+        _binding = ErrorDialogFragmentBinding.inflate(inflater, container, false)
 
         return binding.root
     }
@@ -34,12 +34,10 @@ class ChangeTitleDialog: DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.submitBtn.setOnClickListener {
-            val orgInput = binding.organizationInput.text.toString()
-            val repoInput = binding.repositoryInput.text.toString()
+        binding.errorGuide.text = "존재하지 않는 Repository 입니다."
+        binding.errorMessage.text = viewModel.errorMsg.value
 
-            viewModel.setIssueList(orgInput, repoInput)
-
+        binding.dismissBtn.setOnClickListener {
             dismiss()
         }
     }

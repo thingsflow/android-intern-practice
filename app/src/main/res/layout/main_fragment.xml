@@ -20,6 +20,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="organization"
+        android:textSize="24dp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -28,6 +30,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="/"
+        android:textSize="24dp"
+        android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@id/organizationName"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -36,6 +40,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="repository"
+        android:textSize="24dp"
+        android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@id/slash"
         app:layout_constraintTop_toTopOf="parent" />
 
