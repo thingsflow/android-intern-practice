@@ -33,8 +33,7 @@ class IssueListAdapter @Inject constructor() :
 
     inner class IssueListViewHolder(private val binding: IssueItemBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Item.IssueData, position: Int) {
-            binding.issueNum.text = "#${item.issueNum.toString()}: "
-            binding.issueTitle.text = item.issueTitle
+            binding.issueItem.text = "#${item.issueNum.toString()}: ${item.issueTitle}"
 
             binding.root.setOnClickListener{
                 val action = MainFragmentDirections.actionMainToDetail(position)
@@ -47,8 +46,7 @@ class IssueListAdapter @Inject constructor() :
                 .load(item.url)
                 .into(binding.bannerImg)
 
-            binding.issueNum.visibility = View.INVISIBLE
-            binding.issueTitle.visibility = View.INVISIBLE
+            binding.issueItem.visibility = View.INVISIBLE
 
             binding.root.setOnClickListener {
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(HOME_PAGE_URL))

@@ -56,6 +56,7 @@ class IssueDetailFragment : Fragment() {
         issueDetail.observe(viewLifecycleOwner, Observer {
             Glide.with(binding.root)
                 .load(it.userInfo.userProfile)
+                .circleCrop()
                 .into(binding.userProfile)
 
             binding.userId.text = it.userInfo.userId
