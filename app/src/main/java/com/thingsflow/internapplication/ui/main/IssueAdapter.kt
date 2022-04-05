@@ -5,6 +5,7 @@ import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.contains
 import androidx.navigation.*
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -40,6 +41,7 @@ class IssueAdapter @Inject constructor() : ListAdapter<Item, IssueAdapter.ViewHo
         fun bind(issueTitle: String, issueNumber: Int, issueIdx: Int) {
             with(binding) {
                 root.removeView(binding.bannerImg)
+                if (!root.contains(binding.issueText)) root.addView(binding.issueText)
 
                 with(binding) {
                     issueText.text = "#${issueNumber}: $issueTitle"
@@ -56,6 +58,8 @@ class IssueAdapter @Inject constructor() : ListAdapter<Item, IssueAdapter.ViewHo
         fun bindImage(url: String) {
             with(binding) {
                 root.removeView(binding.issueText)
+                if (!root.contains(binding.bannerImg)) root.addView(binding.bannerImg)
+
                 Glide.with(root.context)
                     .load(url)
                     .into(bannerImg)

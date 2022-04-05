@@ -29,10 +29,6 @@ class MainViewModel @Inject constructor(
     }
 
     private fun loadIssues(orgName: String, repoName: String) {
-        if (_issues.value == null) {
-            _issues.value = ArrayList()
-        }
-
         // github api에서 issue 목록을 가져옴
         mainRepository.getIssues(orgName, repoName)
             .subscribeOn(Schedulers.io())
