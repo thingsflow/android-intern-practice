@@ -1,24 +1,29 @@
 package com.thingsflow.internapplication.ui.main
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.contains
+import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.thingsflow.internapplication.data.Item
 import com.thingsflow.internapplication.databinding.ItemIssueBinding
+import dagger.hilt.android.qualifiers.ActivityContext
 import javax.inject.Inject
 
-class IssueAdapter @Inject constructor() : ListAdapter<Item, IssueAdapter.ViewHolder>(ItemDiffCallback) {
+class IssueAdapter @Inject constructor(@ActivityContext context: Context) : ListAdapter<Item, IssueAdapter.ViewHolder>(ItemDiffCallback) {
     companion object {
         const val URL_WEBPAGE = "https://thingsflow.com/ko/home"
     }
 
     private lateinit var parentView: ViewGroup
+    private val viewModel: MainViewModel = ViewModelProvider(context as FragmentActivity)[MainViewModel::class.java]
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -44,7 +49,7 @@ class IssueAdapter @Inject constructor() : ListAdapter<Item, IssueAdapter.ViewHo
 
                 issueText.text = "#${issueNumber}: $issueTitle"
                 issueText.setOnClickListener(View.OnClickListener {
-                    // TODO: viewModel.clickIssue(issueIdx)
+                    viewModel.clickIssue(issueIdx)
                 })
             }
         }
