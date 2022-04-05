@@ -5,7 +5,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -26,8 +25,6 @@ class MainFragment : Fragment() {
     private var _binding: MainFragmentBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var organizationTextView: TextView
-    private lateinit var repositoryTextView: TextView
     private lateinit var issueRecyclerView: RecyclerView
 
     private val issueListAdapter = IssueListAdapter()
@@ -73,6 +70,10 @@ class MainFragment : Fragment() {
         loadSuccess.observe(viewLifecycleOwner, Observer {
             if(it == false){
                 showErrorDialog()
+                setIssueList(
+                    viewModel.repositoryInfo.value!!.organization,
+                    viewModel.repositoryInfo.value!!.repository
+                )
             }
         })
     }

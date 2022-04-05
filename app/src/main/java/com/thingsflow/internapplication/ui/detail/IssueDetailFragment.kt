@@ -62,9 +62,7 @@ class IssueDetailFragment : Fragment() {
             binding.userId.text = it.userInfo.userId
             binding.body.text = it.issueBody
 
-            (activity as AppCompatActivity).supportActionBar?.setTitle(
-                "#${it.issueNum}"
-            )
+            (activity as AppCompatActivity).supportActionBar?.title = "#${it.issueNum}"
 
         })
     }

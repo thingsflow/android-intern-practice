@@ -40,7 +40,6 @@ class MainViewModel @Inject constructor(private val issueRepository: IssueReposi
 
         var itemList: ArrayList<Item>
 
-        setRepositoryInfo(organization, repository)
 
         issueRepository.getIssues(organization, repository)
             .subscribeOn(Schedulers.io())
@@ -50,19 +49,20 @@ class MainViewModel @Inject constructor(private val issueRepository: IssueReposi
 
                 itemList = ArrayList(it)
 
-                if(itemList.size >= POS){
+                if(itemList.size > POS){
                     itemList.add(POS, Item.Image(BANNER_IMG_URL))
                 }
 
+
                 _issueList.value = itemList
+                setRepositoryInfo(organization, repository)
+
                 _loadSuccess.value = true
             }, {
                 Log.d("getIssue", "fail : ${it.message}")
                 _loadSuccess.value = false
                 _errorMsg.value = it.message
             })
-
-
     }
 
     fun setIssueDetail(index: Int){
