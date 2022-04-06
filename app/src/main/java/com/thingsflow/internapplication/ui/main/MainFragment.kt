@@ -9,16 +9,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.NavDirections
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.thingsflow.internapplication.databinding.MainFragmentBinding
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
 import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.components.FragmentComponent
-import dagger.hilt.android.scopes.FragmentScoped
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -29,8 +23,11 @@ class MainFragment @Inject constructor() : Fragment() {
 
     private var _binding: MainFragmentBinding? = null
     private val binding get() = _binding!!
-    @Inject
-    lateinit var issueAdapter: IssueAdapter
+    private var issueAdapter: IssueAdapter = IssueAdapter(object: IssueAdapter.OnClickIssueListener {
+        override fun onClick(issueIdx: Int) {
+            viewModel.clickIssue(issueIdx)
+        }
+    })
     private val viewModel: MainViewModel by activityViewModels<MainViewModel>()
 
     override fun onCreateView(
@@ -102,12 +99,5 @@ class MainFragment @Inject constructor() : Fragment() {
             .create()
 
         alertDialog.show()
-    }
-
-    // @Inject constructor() ...
-    inner class OnClickIssueListenerImpl : OnClickIssueListener {
-        override fun onClick(issueIdx: Int) {
-            viewModel.clickIssue(issueIdx)
-        }
     }
 }

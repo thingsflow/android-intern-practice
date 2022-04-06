@@ -11,17 +11,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.thingsflow.internapplication.data.Item
 import com.thingsflow.internapplication.databinding.ItemIssueBinding
-import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
-@AndroidEntryPoint
-class IssueAdapter @Inject constructor() : ListAdapter<Item, IssueAdapter.ViewHolder>(ItemDiffCallback) {
+class IssueAdapter @Inject constructor(private val onClickIssueListenerImpl: OnClickIssueListener) : ListAdapter<Item, IssueAdapter.ViewHolder>(ItemDiffCallback) {
     companion object {
         const val URL_WEBPAGE = "https://thingsflow.com/ko/home"
     }
 
-    @Inject
-    lateinit var onClickIssueListener: OnClickIssueListener
+    interface OnClickIssueListener {
+        fun onClick(issueIdx: Int)
+    }
+
     private lateinit var parentView: ViewGroup
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -49,7 +49,7 @@ class IssueAdapter @Inject constructor() : ListAdapter<Item, IssueAdapter.ViewHo
                 issueText.text = "#${issueNumber}: $issueTitle"
                 issueText.setOnClickListener(View.OnClickListener {
 //                    viewModel.clickIssue(issueIdx)
-                    onClickIssueListener.onClick(issueIdx)
+                    onClickIssueListenerImpl.onClick(issueIdx)
                 })
             }
         }
