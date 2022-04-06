@@ -48,7 +48,6 @@ class IssueAdapter @Inject constructor(private val onClickIssueListenerImpl: OnC
 
                 issueText.text = "#${issueNumber}: $issueTitle"
                 issueText.setOnClickListener(View.OnClickListener {
-//                    viewModel.clickIssue(issueIdx)
                     onClickIssueListenerImpl.onClick(issueIdx)
                 })
             }

@@ -7,7 +7,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/profile"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -20,20 +20,25 @@
             android:id="@+id/profile_iv"
             android:layout_width="@dimen/profile_image"
             android:layout_height="@dimen/profile_image"
-
             android:background="@drawable/bg_profile"
-            android:clipToOutline="true" />
+            android:clipToOutline="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/profile_name_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/default_margin"
             android:text="Dayun Cha"
             android:textColor="@color/black"
             android:textSize="@dimen/profile_name"
-            android:textStyle="bold" />
-    </LinearLayout>
+            android:textStyle="bold"
+            android:layout_marginLeft="@dimen/default_margin"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/profile_iv"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ScrollView
         android:layout_width="0dp"
