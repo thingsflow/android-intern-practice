@@ -84,11 +84,9 @@ class MainFragment : Fragment() {
                 )
             }
         })
-        eventNavigateToDetail.observe(viewLifecycleOwner, Observer {
-            it.isActive()?.let { issuePos ->
-                val action = MainFragmentDirections.actionMainToDetail(issuePos)
-                Navigation.findNavController(requireView()).navigate(action)
-            }
+        eventNavigateToDetail.observe(viewLifecycleOwner, EventObserver{
+            val action = MainFragmentDirections.actionMainToDetail(it)
+            Navigation.findNavController(requireView()).navigate(action)
         })
     }
 
