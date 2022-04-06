@@ -13,11 +13,16 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.thingsflow.internapplication.databinding.MainFragmentBinding
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
 import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.components.FragmentComponent
+import dagger.hilt.android.scopes.FragmentScoped
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainFragment : Fragment() {
+class MainFragment @Inject constructor() : Fragment() {
     companion object {
         fun newInstance() = MainFragment()
     }
@@ -97,5 +102,12 @@ class MainFragment : Fragment() {
             .create()
 
         alertDialog.show()
+    }
+
+    // @Inject constructor() ...
+    inner class OnClickIssueListenerImpl : OnClickIssueListener {
+        override fun onClick(issueIdx: Int) {
+            viewModel.clickIssue(issueIdx)
+        }
     }
 }
