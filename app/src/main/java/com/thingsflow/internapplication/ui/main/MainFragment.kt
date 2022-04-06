@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.thingsflow.internapplication.R
@@ -27,7 +28,7 @@ class MainFragment : Fragment() {
 
     private lateinit var issueRecyclerView: RecyclerView
 
-    private val issueListAdapter = IssueListAdapter()
+    private lateinit var issueListAdapter: IssueListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,6 +56,13 @@ class MainFragment : Fragment() {
         }
 
         issueRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+
+        issueListAdapter = IssueListAdapter(object : IssueSelectedListener{
+            override fun onIssueSelected(issuePos: Int) {
+                viewModel.userClickIssue(issuePos)
+            }
+        })
+
         issueRecyclerView.adapter = issueListAdapter
 
         observe()
@@ -74,6 +82,12 @@ class MainFragment : Fragment() {
                     viewModel.repositoryInfo.value!!.organization,
                     viewModel.repositoryInfo.value!!.repository
                 )
+            }
+        })
+        eventNavigateToDetail.observe(viewLifecycleOwner, Observer {
+            it.isActive()?.let { issuePos ->
+                val action = MainFragmentDirections.actionMainToDetail(issuePos)
+                Navigation.findNavController(requireView()).navigate(action)
             }
         })
     }

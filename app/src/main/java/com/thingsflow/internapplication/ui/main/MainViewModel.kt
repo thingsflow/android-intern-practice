@@ -32,6 +32,9 @@ class MainViewModel @Inject constructor(private val issueRepository: IssueReposi
     private val _errorMsg = MutableLiveData<String>()
     val errorMsg : LiveData<String> = _errorMsg
 
+    private val _eventNavigateToDetail = MutableLiveData<Event<Int>>()
+    val eventNavigateToDetail : LiveData<Event<Int>> = _eventNavigateToDetail
+
     private fun setRepositoryInfo(organization: String, repository: String){
         _repositoryInfo.value = RepositoryInfo(organization, repository)
     }
@@ -39,7 +42,6 @@ class MainViewModel @Inject constructor(private val issueRepository: IssueReposi
     fun setIssueList(organization: String, repository: String){
 
         var itemList: ArrayList<Item>
-
 
         issueRepository.getIssues(organization, repository)
             .subscribeOn(Schedulers.io())
@@ -53,11 +55,10 @@ class MainViewModel @Inject constructor(private val issueRepository: IssueReposi
                     itemList.add(POS, Item.Image(BANNER_IMG_URL))
                 }
 
-
                 _issueList.value = itemList
                 setRepositoryInfo(organization, repository)
-
                 _loadSuccess.value = true
+
             }, {
                 Log.d("getIssue", "fail : ${it.message}")
                 _loadSuccess.value = false
@@ -67,5 +68,9 @@ class MainViewModel @Inject constructor(private val issueRepository: IssueReposi
 
     fun setIssueDetail(index: Int){
         _issueDetail.value = issueList.value?.get(index) as Item.IssueData?
+    }
+
+    fun userClickIssue(index: Int){
+        _eventNavigateToDetail.value = Event(index)
     }
 }

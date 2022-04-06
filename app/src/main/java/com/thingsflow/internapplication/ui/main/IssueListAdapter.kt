@@ -5,7 +5,6 @@ import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.Navigation
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -13,7 +12,7 @@ import com.thingsflow.internapplication.data.Item
 import com.thingsflow.internapplication.databinding.IssueItemBinding
 import javax.inject.Inject
 
-class IssueListAdapter @Inject constructor() :
+class IssueListAdapter @Inject constructor(private val listener: IssueSelectedListener) :
     ListAdapter<Item, IssueListAdapter.IssueListViewHolder>(IssueListCallBack) {
 
     private val HOME_PAGE_URL = "https://thingsflow.com/ko/home"
@@ -36,8 +35,7 @@ class IssueListAdapter @Inject constructor() :
             binding.issueItem.text = "#${item.issueNum.toString()}: ${item.issueTitle}"
 
             binding.root.setOnClickListener{
-                val action = MainFragmentDirections.actionMainToDetail(position)
-                Navigation.findNavController(it).navigate(action)
+                listener.onIssueSelected(position)
             }
         }
 
