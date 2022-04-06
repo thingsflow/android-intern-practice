@@ -70,7 +70,8 @@ class MainFragment : Fragment() {
 
     private fun observe() = with(viewModel) {
         repositoryInfo.observe(viewLifecycleOwner, Observer {
-            binding.title.text = "${it.organization} / ${it.repository}"
+            val titleText = "${it.organization} / ${it.repository}"
+            binding.title.text = titleText
         })
         issueList.observe(viewLifecycleOwner, Observer {
             issueListAdapter.submitList(it)

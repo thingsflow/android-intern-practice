@@ -32,7 +32,8 @@ class IssueListAdapter @Inject constructor(private val listener: IssueSelectedLi
 
     inner class IssueListViewHolder(private val binding: IssueItemBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Item.IssueData, position: Int) {
-            binding.issueItem.text = "#${item.issueNum.toString()}: ${item.issueTitle}"
+            val itemText = "#${item.issueNum}: ${item.issueTitle}"
+            binding.issueItem.text = itemText
 
             binding.root.setOnClickListener{
                 listener.onIssueSelected(position)

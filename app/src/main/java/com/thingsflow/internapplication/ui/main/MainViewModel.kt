@@ -80,7 +80,7 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             issueRepositoryCoroutine.getIssues(organization, repository)
                 .catch {
-                    Log.d("getIssue", "fail : ${this.toString()}")
+                    Log.d("getIssue", "fail : $this")
                     _loadSuccess.value = false
                 }
                 .collect {
