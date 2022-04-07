@@ -4,10 +4,13 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.thingsflow.internapplication.data.Item
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -34,12 +37,13 @@ class MainViewModel @Inject constructor(
 
     private fun loadIssues(orgName: String, repoName: String) {
         // github api에서 issue 목록을 가져옴
-        mainRepository.getIssues(orgName, repoName)
+        /* Rxjava version
+        mainRepository.getIssuesRx(orgName, repoName)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 {
-                    Log.d("SUCCESS: Get issue", "${it.size}")
+                    Log.d("SUCCESS: Get issue by rxjava", "${it.size}")
 
                     val list: MutableList<Item> = it.toMutableList()
                     if (list.size >= POS_BANNER) {
@@ -52,10 +56,28 @@ class MainViewModel @Inject constructor(
                     _loadingError.value = false
                 },
                 {
-                    Log.e("ERROR: Get issue", "${it.message}")
+                    Log.e("ERROR: Get issue by rxjava", "${it.message}")
                     _loadingError.value = true
                 }
             )
+         */
+
+        /* Coroutine flow version */
+        viewModelScope.launch {
+            mainRepository.getIssuesFlow(orgName, repoName).collect {
+                Log.d("SUCCESS: Get issue by coroutine flow", "${it.size}")
+
+                val list: MutableList<Item> = it.toMutableList()
+                if (list.size >= POS_BANNER) {
+                    list.add(POS_BANNER, Item.Image(URL_BANNER))
+                }
+                _issues.value = ArrayList(list)
+
+                setOrgName(orgName)
+                setRepoName(repoName)
+                _loadingError.value = false
+            }
+        }
     }
 
     private fun setOrgName(orgName: String) {
