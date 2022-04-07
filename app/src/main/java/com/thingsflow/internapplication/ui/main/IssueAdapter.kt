@@ -11,9 +11,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.thingsflow.internapplication.data.Item
 import com.thingsflow.internapplication.databinding.ItemIssueBinding
-import javax.inject.Inject
 
-class IssueAdapter @Inject constructor(private val onClickIssueListenerImpl: OnClickIssueListener) : ListAdapter<Item, IssueAdapter.ViewHolder>(ItemDiffCallback) {
+class IssueAdapter constructor(private val onClickIssueListenerImpl: OnClickIssueListener) : ListAdapter<Item, IssueAdapter.ViewHolder>(ItemDiffCallback) {
     companion object {
         const val URL_WEBPAGE = "https://thingsflow.com/ko/home"
     }

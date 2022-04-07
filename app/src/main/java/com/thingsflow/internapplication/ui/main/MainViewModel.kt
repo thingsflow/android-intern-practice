@@ -10,7 +10,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.launch
+import java.lang.Exception
 import javax.inject.Inject
 
 @HiltViewModel
@@ -45,15 +47,7 @@ class MainViewModel @Inject constructor(
                 {
                     Log.d("SUCCESS: Get issue by rxjava", "${it.size}")
 
-                    val list: MutableList<Item> = it.toMutableList()
-                    if (list.size >= POS_BANNER) {
-                        list.add(POS_BANNER, Item.Image(URL_BANNER))
-                    }
-                    _issues.value = ArrayList(list)
-
-                    setOrgName(orgName)
-                    setRepoName(repoName)
-                    _loadingError.value = false
+                    setLoadedIssues(it, orgName, repoName)
                 },
                 {
                     Log.e("ERROR: Get issue by rxjava", "${it.message}")
@@ -64,20 +58,28 @@ class MainViewModel @Inject constructor(
 
         /* Coroutine flow version */
         viewModelScope.launch {
-            mainRepository.getIssuesFlow(orgName, repoName).collect {
+            try {
+                val it = mainRepository.getIssuesFlow(orgName, repoName).single()
+
                 Log.d("SUCCESS: Get issue by coroutine flow", "${it.size}")
-
-                val list: MutableList<Item> = it.toMutableList()
-                if (list.size >= POS_BANNER) {
-                    list.add(POS_BANNER, Item.Image(URL_BANNER))
-                }
-                _issues.value = ArrayList(list)
-
-                setOrgName(orgName)
-                setRepoName(repoName)
-                _loadingError.value = false
+                setLoadedIssues(it, orgName, repoName)
+            } catch (e: Exception) {
+                Log.e("ERROR: Get issue by rxjava", "${e.message}")
+                _loadingError.value = true
             }
         }
+    }
+
+    private fun setLoadedIssues(it: List<Item.Issue>, orgName: String, repoName: String) {
+        val list: MutableList<Item> = it.toMutableList()
+        if (list.size >= POS_BANNER) {
+            list.add(POS_BANNER, Item.Image(URL_BANNER))
+        }
+        _issues.value = ArrayList(list)
+
+        setOrgName(orgName)
+        setRepoName(repoName)
+        _loadingError.value = false
     }
 
     private fun setOrgName(orgName: String) {
