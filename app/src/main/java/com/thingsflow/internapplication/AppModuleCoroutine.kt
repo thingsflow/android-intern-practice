@@ -20,7 +20,6 @@ object AppModuleCoroutine {
     fun provideRetrofitCoroutine(): Retrofit{
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
-            .client(OkHttpClient())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
