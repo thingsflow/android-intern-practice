@@ -13,6 +13,10 @@
         <action
             android:id="@+id/action_main_to_detail"
             app:destination="@+id/issueDetailFragment">
+            <argument
+                android:name="issuePosition"
+                app:argType="integer"
+                android:defaultValue="0"/>
         </action>
     </fragment>
 
@@ -21,6 +25,9 @@
         android:name="com.thingsflow.internapplication.ui.detail.IssueDetailFragment"
         android:label="IssueDetailFragment"
         tools:layout="@layout/issue_detail_fragment">
+        <argument
+            android:name="issuePosition"
+            app:argType="integer"/>
     </fragment>
 
 </navigation>
