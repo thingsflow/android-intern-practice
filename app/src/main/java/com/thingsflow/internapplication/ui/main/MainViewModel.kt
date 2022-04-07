@@ -10,10 +10,7 @@ import com.thingsflow.internapplication.data.RepositoryInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
-import kotlinx.coroutines.flow.FlowCollector
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.single
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.lang.Exception
 import javax.inject.Inject
@@ -81,11 +78,8 @@ class MainViewModel @Inject constructor(
 
         //Coroutine
         viewModelScope.launch {
-
-            var issues : ArrayList<Item.IssueData> = ArrayList()
-
-            try{
-                issues = issueRepositoryCoroutine.getIssues(organization, repository).single()
+            try {
+                val issues = issueRepositoryCoroutine.getIssues(organization, repository).single()
 
                 Log.d("getIssue", "success using coroutine")
 
@@ -98,7 +92,6 @@ class MainViewModel @Inject constructor(
                 _issueList.value = itemList
                 setRepositoryInfo(organization, repository)
                 _loadSuccess.value = true
-
             } catch (e: Exception){
                 Log.d("getIssue", "fail : $e")
                 _loadSuccess.value = false
