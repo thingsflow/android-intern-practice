@@ -1,7 +1,5 @@
 package com.thingsflow.internapplication.ui.main
 
-import android.content.Context
-import com.thingsflow.internapplication.MainActivity
 import com.thingsflow.internapplication.RetrofitAPI
 import dagger.Module
 import dagger.Provides
@@ -33,7 +31,4 @@ class ApiModule {
     @Singleton
     @Provides
     fun provideMainRepository(retrofitAPI: RetrofitAPI) : MainRepository = MainRepository(retrofitAPI)
-
-//    @Provides
-//    fun provideContext() : Context =
 }

@@ -8,12 +8,9 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.navArgs
+import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.thingsflow.internapplication.databinding.DetailFragmentBinding
-import com.thingsflow.internapplication.ui.main.Issue
 import com.thingsflow.internapplication.ui.main.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -41,27 +38,23 @@ class DetailFragment : Fragment() {
         _binding = null
     }
 
+    private fun observe() = with(viewModel) {
+        selectedIssue.observe(viewLifecycleOwner, Observer {
+            (activity as AppCompatActivity).supportActionBar?.title = "#${it.number}"
+
+            with(binding) {
+                Glide.with(root.context)
+                    .load(it.user.profileUrl)
+                    .into(profileIv)
+                profileNameTv.text = it.user.id
+                issueBodyTv.text = it.body
+            }
+        })
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // TODO: Use the ViewModel
-        val args: DetailFragmentArgs by navArgs()
-        val issueIdx = args.issueIdx
 
-        val issue: Issue? = viewModel.issues.value?.get(issueIdx)
-        if (issue == null) {
-            Log.e("Null Error", "Detail argument issue is null")
-            return
-        }
-
-        (activity as AppCompatActivity).supportActionBar?.title = "#${issue.number}"
-
-        with(binding) {
-            Glide.with(root.context)
-                .load(issue.user.profileUrl)
-                .into(profileIv)
-            profileNameTv.setText(issue.user.id)
-            issueBodyTv.setText(issue.body)
-
-        }
+        observe()
     }
 }

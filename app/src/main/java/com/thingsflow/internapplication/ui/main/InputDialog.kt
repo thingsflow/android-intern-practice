@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import com.thingsflow.internapplication.databinding.InputDialogBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -41,9 +40,9 @@ class InputDialog : DialogFragment() {
         dialog?.window?.setLayout(1000, 600)
         with(binding) {
             completeBtn.setOnClickListener(View.OnClickListener {
-                val org_name = orgEt.text.toString()
-                val repo_name = repoEt.text.toString()
-                viewModel.changeTitle(org_name, repo_name)
+                val orgName = orgEt.text.toString()
+                val repoName = repoEt.text.toString()
+                viewModel.changeTitle(orgName, repoName)
                 dismiss()
             })
         }

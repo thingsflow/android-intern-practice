@@ -1,31 +1,33 @@
 package com.thingsflow.internapplication.ui.main
 
 import android.app.AlertDialog
-import android.content.DialogInterface
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.NavDirections
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.thingsflow.internapplication.databinding.MainFragmentBinding
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainFragment : Fragment() {
+class MainFragment @Inject constructor() : Fragment() {
     companion object {
         fun newInstance() = MainFragment()
     }
 
     private var _binding: MainFragmentBinding? = null
     private val binding get() = _binding!!
-    @Inject
-    lateinit var issueAdapter: IssueAdapter
+    private var issueAdapter: IssueAdapter = IssueAdapter(object: IssueAdapter.OnClickIssueListener {
+        override fun onClick(issueIdx: Int) {
+            viewModel.clickIssue(issueIdx)
+        }
+    })
     private val viewModel: MainViewModel by activityViewModels<MainViewModel>()
 
     override fun onCreateView(
@@ -60,11 +62,11 @@ class MainFragment : Fragment() {
 
     private fun observe() = with(viewModel) {
         orgName.observe(viewLifecycleOwner, Observer {
-            binding.orgName.setText(it)
+            binding.orgName.text = it
         })
 
         repoName.observe(viewLifecycleOwner, Observer {
-            binding.repoName.setText(it)
+            binding.repoName.text = it
         })
 
         issues.observe(viewLifecycleOwner, Observer {
@@ -76,9 +78,20 @@ class MainFragment : Fragment() {
                 showAlertDialog("입력 오류", "입력한 Repository를 조회할 수 없습니다.")
             }
         })
+
+        eventStartDetailActivity.observeEvent(viewLifecycleOwner, Observer {
+            navigateToDetailFragment()
+        })
     }
 
-    fun showAlertDialog(title: String, message: String) {
+    private fun navigateToDetailFragment() {
+        val navDirection: NavDirections = MainFragmentDirections.actionMainFragmentToDetailFragment()
+        val navController = findNavController()
+
+        navController.navigate(navDirection)
+    }
+
+    private fun showAlertDialog(title: String, message: String) {
         val alertDialog = AlertDialog.Builder(context)
             .setTitle(title)
             .setMessage(message)

@@ -1,70 +1,77 @@
 package com.thingsflow.internapplication.ui.main
 
-import android.app.AlertDialog
-import android.content.Context
-import android.content.DialogInterface
-import android.content.Intent
 import android.util.Log
-import android.widget.Toast
-import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.thingsflow.internapplication.data.Item
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ActivityContext
-import dagger.hilt.android.qualifiers.ApplicationContext
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
 import javax.inject.Inject
-import javax.inject.Singleton
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val mainRepository: MainRepository
 ) : ViewModel() {
-    // TODO: Implement the ViewModel
-    private val _issues = MutableLiveData<ArrayList<Issue>>()
-    val issues: LiveData<ArrayList<Issue>> = _issues
+    private val _issues = MutableLiveData<ArrayList<Item>>()
+    val issues: LiveData<ArrayList<Item>> = _issues
     private val _orgName = MutableLiveData<String>()
     val orgName: LiveData<String> = _orgName
     private val _repoName = MutableLiveData<String>()
     val repoName: LiveData<String> = _repoName
     private val _loadingError = MutableLiveData<Boolean>()
     val loadingError: LiveData<Boolean> = _loadingError
+    private val _selectedIssue = MutableLiveData<Item.Issue>()
+    val selectedIssue = _selectedIssue
+    private val _eventStartDetailActivity = MutableLiveData<Event<Unit>>()
+    val eventStartDetailActivity: LiveData<Event<Unit>> = _eventStartDetailActivity
+
+    companion object {
+        const val POS_BANNER = 4
+        const val URL_BANNER = "https://s3.ap-northeast-2.amazonaws.com/hellobot-kr-test/image/main_logo.png"
+    }
 
     private fun loadIssues(orgName: String, repoName: String) {
-        if (_issues.value == null) {
-            _issues.value = ArrayList()
-        }
-
         // github api에서 issue 목록을 가져옴
         mainRepository.getIssues(orgName, repoName)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 {
-                    Log.d("SUCCESS: Get issue", it[0].title)
-                    _issues.value = ArrayList(it)
+                    Log.d("SUCCESS: Get issue", "${it.size}")
+
+                    val list: MutableList<Item> = it.toMutableList()
+                    if (list.size >= POS_BANNER) {
+                        list.add(POS_BANNER, Item.Image(URL_BANNER))
+                    }
+                    _issues.value = ArrayList(list)
+
                     setOrgName(orgName)
                     setRepoName(repoName)
                     _loadingError.value = false
                 },
                 {
-                    Log.e("Error: Get issue", "${it.message}")
+                    Log.e("ERROR: Get issue", "${it.message}")
                     _loadingError.value = true
                 }
             )
     }
 
-    fun setOrgName(orgName: String) {
+    private fun setOrgName(orgName: String) {
         _orgName.value = orgName
     }
 
-    fun setRepoName(repoName: String) {
+    private fun setRepoName(repoName: String) {
         _repoName.value = repoName
     }
 
     fun changeTitle(orgName: String, repoName: String) {
         loadIssues(orgName, repoName)
+    }
+
+    fun clickIssue(issueIdx: Int) {
+        _selectedIssue.value = issues.value?.get(issueIdx) as Item.Issue
+        _eventStartDetailActivity.value = Event(Unit)
     }
 }
