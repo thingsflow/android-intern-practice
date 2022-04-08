@@ -2,6 +2,8 @@ package com.thingsflow.internapplication.data
 
 sealed class Item {
     data class Issue (
+        val orgName: String,
+        val repoName: String,
         val user: User,
         val number: Int,
         val title: String,

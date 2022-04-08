@@ -42,8 +42,8 @@ class IssueAdapter constructor(private val onClickIssueListenerImpl: OnClickIssu
     inner class ViewHolder(private val binding: ItemIssueBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(issueTitle: String, issueNumber: Int, issueIdx: Int) {
             with(binding) {
-                root.removeView(binding.bannerImg)
-                if (!root.contains(binding.issueText)) root.addView(binding.issueText)
+                bannerImg.visibility = View.GONE
+                issueText.visibility = View.VISIBLE
 
                 issueText.text = "#${issueNumber}: $issueTitle"
                 issueText.setOnClickListener(View.OnClickListener {
@@ -54,8 +54,8 @@ class IssueAdapter constructor(private val onClickIssueListenerImpl: OnClickIssu
 
         fun bindImage(url: String) {
             with(binding) {
-                root.removeView(binding.issueText)
-                if (!root.contains(binding.bannerImg)) root.addView(binding.bannerImg)
+                bannerImg.visibility = View.VISIBLE
+                issueText.visibility = View.GONE
 
                 Glide.with(root.context)
                     .load(url)

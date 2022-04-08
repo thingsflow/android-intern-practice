@@ -5,11 +5,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.thingsflow.internapplication.data.GithubRepo
+import com.thingsflow.internapplication.data.GithubRepoDatabase
 import com.thingsflow.internapplication.data.Item
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.schedulers.Schedulers
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.launch
 import java.lang.Exception
@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val mainRepository: MainRepository
+    private val mainRepository: MainRepository,
 ) : ViewModel() {
     private val _issues = MutableLiveData<ArrayList<Item>>()
     val issues: LiveData<ArrayList<Item>> = _issues
@@ -59,12 +59,27 @@ class MainViewModel @Inject constructor(
         /* Coroutine flow version */
         viewModelScope.launch {
             try {
-                val it = mainRepository.getIssuesFlow(orgName, repoName).single()
+                var issueList: List<Item.Issue>?
+                kotlinx.coroutines.withContext(Dispatchers.IO) {
+                    issueList = mainRepository.getIssuesRoom(orgName, repoName).single()
+                }
 
-                Log.d("SUCCESS: Get issue by coroutine flow", "${it.size}")
-                setLoadedIssues(it, orgName, repoName)
+                if (issueList != null) {
+                    Log.d("SUCCESS: Load data from room", "${issueList!!.size}")
+                }
+
+                if (issueList == null) {
+                    issueList = mainRepository.getIssuesFlow(orgName, repoName).single()
+                    Log.d("SUCCESS: Get issue by coroutine flow", "${issueList!!.size}")
+                    kotlinx.coroutines.withContext(Dispatchers.IO) {
+                        mainRepository.insertGithubRepoToRoom(orgName, repoName, issueList!!)
+                    }
+                    Log.d("SUCCESS: Save issue to room", "${issueList!!.size}")
+                }
+
+                setLoadedIssues(issueList!!, orgName, repoName)
             } catch (e: Exception) {
-                Log.e("ERROR: Get issue by rxjava", "${e.message}")
+                Log.e("ERROR: Get issue by rxjava", "ERROR MESSAGE : ${e.message}")
                 _loadingError.value = true
             }
         }
