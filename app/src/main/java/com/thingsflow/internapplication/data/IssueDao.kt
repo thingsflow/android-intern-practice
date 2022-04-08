@@ -5,15 +5,21 @@ import androidx.room.OnConflictStrategy.REPLACE
 
 @Dao
 interface IssueDao {
-    //@Query("SELECT * FROM issues WHERE organization = :organization and repository = :repository")
-    //suspend fun getIssues(organization: String, repository: String): ArrayList<Item.IssueData>?
+
+    @Query("SELECT * FROM repository_with_issue WHERE organization = :organization and repository = :repository")
+    suspend fun getRepoWithIssues(organization: String, repository: String): RepositoryWithIssue
 
     @Insert(onConflict = REPLACE)
-    suspend fun insertAllIssues(issue: ArrayList<Item.IssueData>)
+    suspend fun insertAllIssues(repositoryWithIssue: RepositoryWithIssue)
+}
 
-    @Update
-    suspend fun updateIssues(issue: Item.IssueData)
+@Dao
+interface RepositoryDao {
 
-    @Delete
-    suspend fun deleteIssues(issue: Item.IssueData)
+    @Query("SELECT * FROM repositories WHERE organization = :organization and repository = :repository")
+    suspend fun getRepository(organization: String, repository: String): RepositoryInfo
+
+    @Insert(onConflict = REPLACE)
+    suspend fun insertRepository(repositoryInfo: RepositoryInfo)
+
 }

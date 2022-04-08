@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.thingsflow.internapplication.data.IssueDao
 import com.thingsflow.internapplication.data.IssueDatabase
+import com.thingsflow.internapplication.data.RepositoryDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -48,5 +49,10 @@ object AppModuleCoroutine {
     @Provides
     fun provideIssueDao(issueDatabase: IssueDatabase): IssueDao{
         return issueDatabase.issueDao()
+    }
+
+    @Provides
+    fun provideRepositoryDao(issueDatabase: IssueDatabase): RepositoryDao{
+        return issueDatabase.repositoryDao()
     }
 }

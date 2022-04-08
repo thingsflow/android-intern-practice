@@ -18,7 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     //private val issueRepository: IssueRepository,
-    private val issueRepositoryCoroutine: IssueRepositoryCoroutine
+    private val issueRepositoryCoroutine: IssueRepositoryCoroutine,
 ) : ViewModel() {
     // TODO: Implement the ViewModel
     private val BANNER_IMG_URL =
@@ -78,12 +78,39 @@ class MainViewModel @Inject constructor(
 
         //Coroutine
         viewModelScope.launch {
-            try {
-                val issues = issueRepositoryCoroutine.getIssues(organization, repository).single()
 
-                Log.d("getIssue", "success using coroutine")
+            val repo = issueRepositoryCoroutine.getRepositoryRoom(organization, repository)
 
-                itemList = ArrayList(issues)
+            if(repo == null){
+                Log.d("getIssue", "Not in DB")
+                try {
+                    val issues = issueRepositoryCoroutine.getIssues(organization, repository).single()
+
+                    Log.d("getIssue", "success using coroutine")
+
+                    itemList = ArrayList(issues)
+
+                    if (itemList.size >= POS) {
+                        itemList.add(POS, Item.Image(BANNER_IMG_URL))
+                    }
+
+                    _issueList.value = itemList
+                    setRepositoryInfo(organization, repository)
+                    _loadSuccess.value = true
+
+                    issueRepositoryCoroutine.insertRepositoryRoom(organization, repository)
+                    issueRepositoryCoroutine.insertIssueRoom(organization, repository, ArrayList(issues))
+
+                } catch (e: Exception){
+                    Log.d("getIssue", "fail : $e")
+                    _loadSuccess.value = false
+                }
+            }
+            else{
+                Log.d("getIssue", "Is in DB")
+                val issues = issueRepositoryCoroutine.getIssueRoom(organization, repository)
+
+                itemList = ArrayList(issues.issueList)
 
                 if (itemList.size >= POS) {
                     itemList.add(POS, Item.Image(BANNER_IMG_URL))
@@ -92,10 +119,9 @@ class MainViewModel @Inject constructor(
                 _issueList.value = itemList
                 setRepositoryInfo(organization, repository)
                 _loadSuccess.value = true
-            } catch (e: Exception){
-                Log.d("getIssue", "fail : $e")
-                _loadSuccess.value = false
             }
+
+
         }
     }
 

@@ -55,11 +55,11 @@ class IssueDetailFragment : Fragment() {
     private fun observe() = with(viewModel){
         issueDetail.observe(viewLifecycleOwner, Observer {
             Glide.with(binding.root)
-                .load(it.userInfo.userProfile)
+                .load(it.user.userProfile)
                 .circleCrop()
                 .into(binding.userProfile)
 
-            binding.userId.text = it.userInfo.userId
+            binding.userId.text = it.user.userId
             binding.body.text = it.issueBody
 
             (activity as AppCompatActivity).supportActionBar?.title = "#${it.issueNum}"
