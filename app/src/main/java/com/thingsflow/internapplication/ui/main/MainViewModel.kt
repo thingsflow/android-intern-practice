@@ -18,7 +18,6 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     //private val issueRepository: IssueRepository,
-    private val issueRepositoryCoroutine: IssueRepositoryCoroutine,
     private val issueRepositoryRoom: IssueRepositoryRoom
 ) : ViewModel() {
 
@@ -79,37 +78,11 @@ class MainViewModel @Inject constructor(
 
         //Coroutine
         viewModelScope.launch {
+            try {
+                val issue =
+                    issueRepositoryRoom.getIssueInDatabase(organization, repository).single()
 
-            val issuesFromDatabase = issueRepositoryRoom.getIssueRoom(organization, repository)
-
-            if(issuesFromDatabase == null){
-                Log.d("getIssue", "Not in DB")
-                try {
-                    val issues = issueRepositoryCoroutine.getIssues(organization, repository).single()
-
-                    Log.d("getIssue", "success using coroutine")
-
-                    itemList = ArrayList(issues)
-
-                    if (itemList.size >= POS) {
-                        itemList.add(POS, Item.Image(BANNER_IMG_URL))
-                    }
-
-                    _issueList.value = itemList
-                    setRepositoryInfo(organization, repository)
-                    _loadSuccess.value = true
-
-                    issueRepositoryRoom.insertIssueRoom(organization, repository, ArrayList(issues))
-
-                } catch (e: Exception){
-                    Log.d("getIssue", "fail : $e")
-                    _loadSuccess.value = false
-                }
-            }
-            else{
-                Log.d("getIssue", "Is in DB")
-
-                itemList = ArrayList(issuesFromDatabase.issueList)
+                itemList = ArrayList(issue)
 
                 if (itemList.size >= POS) {
                     itemList.add(POS, Item.Image(BANNER_IMG_URL))
@@ -118,7 +91,12 @@ class MainViewModel @Inject constructor(
                 _issueList.value = itemList
                 setRepositoryInfo(organization, repository)
                 _loadSuccess.value = true
+
+            } catch (e: Exception) {
+                Log.d("getIssue", "load fail")
+                _loadSuccess.value = false
             }
+
         }
     }
 
