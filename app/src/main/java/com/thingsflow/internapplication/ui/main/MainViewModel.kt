@@ -18,7 +18,6 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val mainRepository: MainRepository,
-    private val githubRepoDatabase: GithubRepoDatabase
 ) : ViewModel() {
     private val _issues = MutableLiveData<ArrayList<Item>>()
     val issues: LiveData<ArrayList<Item>> = _issues
@@ -59,23 +58,21 @@ class MainViewModel @Inject constructor(
 
         /* Coroutine flow version */
         viewModelScope.launch {
-            // TODO: use room database
             try {
                 var issueList: List<Item.Issue>?
                 kotlinx.coroutines.withContext(Dispatchers.IO) {
-                    val githubRepo = githubRepoDatabase.githubRepoDao().getGithubRepoByOrgAndRepo(orgName, repoName)
-                    if (githubRepo != null) {
-                        issueList = githubRepo.issueList
-                        Log.d("SUCCESS: Load data from room", "${issueList!!.size}")
-                    }
-                    else issueList = null
+                    issueList = mainRepository.getIssuesRoom(orgName, repoName).single()
+                }
+
+                if (issueList != null) {
+                    Log.d("SUCCESS: Load data from room", "${issueList!!.size}")
                 }
 
                 if (issueList == null) {
                     issueList = mainRepository.getIssuesFlow(orgName, repoName).single()
                     Log.d("SUCCESS: Get issue by coroutine flow", "${issueList!!.size}")
                     kotlinx.coroutines.withContext(Dispatchers.IO) {
-                        githubRepoDatabase.githubRepoDao().insert(GithubRepo(orgName, repoName, issueList!!))
+                        mainRepository.insertGithubRepoToRoom(orgName, repoName, issueList!!)
                     }
                     Log.d("SUCCESS: Save issue to room", "${issueList!!.size}")
                 }

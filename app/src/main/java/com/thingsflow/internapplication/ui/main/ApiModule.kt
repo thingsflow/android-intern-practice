@@ -35,7 +35,7 @@ class ApiModule {
 
     @Singleton
     @Provides
-    fun provideMainRepository(retrofitAPI: RetrofitAPI) : MainRepository = MainRepository(retrofitAPI)
+    fun provideMainRepository(retrofitAPI: RetrofitAPI, githubRepoDatabase: GithubRepoDatabase) : MainRepository = MainRepository(retrofitAPI, githubRepoDatabase)
 
     @Singleton
     @Provides
