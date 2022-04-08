@@ -79,10 +79,12 @@ class MainFragment : Fragment() {
         loadSuccess.observe(viewLifecycleOwner, Observer {
             if(it == false){
                 showErrorDialog()
-                setIssueList(
-                    viewModel.repositoryInfo.value!!.organization,
-                    viewModel.repositoryInfo.value!!.repository
-                )
+                if(viewModel.repositoryInfo.value != null){
+                    setIssueList(
+                        viewModel.repositoryInfo.value!!.organization,
+                        viewModel.repositoryInfo.value!!.repository
+                    )
+                }
             }
         })
         eventNavigateToDetail.observe(viewLifecycleOwner, EventObserver{

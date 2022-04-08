@@ -35,6 +35,9 @@ class IssueListAdapter @Inject constructor(private val listener: IssueSelectedLi
             val itemText = "#${item.issueNum}: ${item.issueTitle}"
             binding.issueItem.text = itemText
 
+            binding.issueItem.visibility = View.VISIBLE
+            binding.bannerImg.visibility = View.GONE
+
             binding.root.setOnClickListener{
                 listener.onIssueSelected(position)
             }
@@ -45,7 +48,8 @@ class IssueListAdapter @Inject constructor(private val listener: IssueSelectedLi
                 .load(item.url)
                 .into(binding.bannerImg)
 
-            binding.issueItem.visibility = View.INVISIBLE
+            binding.bannerImg.visibility = View.VISIBLE
+            binding.issueItem.visibility = View.GONE
 
             binding.root.setOnClickListener {
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(HOME_PAGE_URL))

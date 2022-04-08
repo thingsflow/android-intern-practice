@@ -10,17 +10,18 @@ import com.thingsflow.internapplication.data.RepositoryInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import java.lang.Exception
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
     //private val issueRepository: IssueRepository,
-    private val issueRepositoryCoroutine: IssueRepositoryCoroutine
+    private val issueRepositoryCoroutine: IssueRepositoryCoroutine,
+    private val issueRepositoryRoom: IssueRepositoryRoom
 ) : ViewModel() {
-    // TODO: Implement the ViewModel
+
     private val BANNER_IMG_URL =
         "https://s3.ap-northeast-2.amazonaws.com/hellobot-kr-test/image/main_logo.png"
     private val POS = 4
@@ -78,24 +79,46 @@ class MainViewModel @Inject constructor(
 
         //Coroutine
         viewModelScope.launch {
-            issueRepositoryCoroutine.getIssues(organization, repository)
-                .catch {
-                    Log.d("getIssue", "fail : $this")
-                    _loadSuccess.value = false
-                }
-                .collect {
+
+            val issuesFromDatabase = issueRepositoryRoom.getIssueRoom(organization, repository)
+
+            if(issuesFromDatabase == null){
+                Log.d("getIssue", "Not in DB")
+                try {
+                    val issues = issueRepositoryCoroutine.getIssues(organization, repository).single()
+
                     Log.d("getIssue", "success using coroutine")
 
-                    itemList = ArrayList(it)
+                    itemList = ArrayList(issues)
 
-                    if(itemList.size >= POS){
+                    if (itemList.size >= POS) {
                         itemList.add(POS, Item.Image(BANNER_IMG_URL))
                     }
 
                     _issueList.value = itemList
                     setRepositoryInfo(organization, repository)
                     _loadSuccess.value = true
+
+                    issueRepositoryRoom.insertIssueRoom(organization, repository, ArrayList(issues))
+
+                } catch (e: Exception){
+                    Log.d("getIssue", "fail : $e")
+                    _loadSuccess.value = false
                 }
+            }
+            else{
+                Log.d("getIssue", "Is in DB")
+
+                itemList = ArrayList(issuesFromDatabase.issueList)
+
+                if (itemList.size >= POS) {
+                    itemList.add(POS, Item.Image(BANNER_IMG_URL))
+                }
+
+                _issueList.value = itemList
+                setRepositoryInfo(organization, repository)
+                _loadSuccess.value = true
+            }
         }
     }
 

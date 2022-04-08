@@ -1,8 +1,9 @@
 package com.thingsflow.internapplication.data
 
+import androidx.room.*
 import com.google.gson.annotations.SerializedName
 
-sealed class Item{
+sealed class Item {
     data class IssueData(
         @SerializedName("number")
         val issueNum: Int,
@@ -11,10 +12,25 @@ sealed class Item{
         @SerializedName("body")
         val issueBody: String,
         @SerializedName("user")
-        val userInfo: UserInfo
-    ): Item()
+        val user: UserInfo,
+    ) : Item()
 
     data class Image(
         val url: String
-    ): Item()
+    ) : Item()
 }
+
+data class UserInfo(
+    @SerializedName("login")
+    val userId: String,
+    @SerializedName("avatar_url")
+    val userProfile: String
+)
+
+data class RepositoryInfo(
+    val organization: String,
+    val repository: String
+)
+
+
+

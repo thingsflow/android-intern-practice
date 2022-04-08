@@ -20,7 +20,7 @@ class ErrorDialog: DialogFragment(){
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = ErrorDialogFragmentBinding.inflate(inflater, container, false)
 
         return binding.root
