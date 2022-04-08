@@ -25,15 +25,11 @@ class MainRepository @Inject constructor(
         }
     }
 
-    fun getIssuesRoom(org: String, repo: String) : Flow<List<Item.Issue>?>  {
-        return flow {
-            val githubRepo = githubRepoDatabase.githubRepoDao().getGithubRepoByOrgAndRepo(org, repo)
-            if (githubRepo != null) emit(githubRepo.issueList)
-            else emit(null)
-        }
+    fun getIssuesRoom(org: String, repo: String) : Flow<GithubRepo?>  {
+        return githubRepoDatabase.githubRepoDao().getGithubRepoByOrgAndRepo(org, repo)
     }
 
-    fun insertGithubRepoToRoom(org: String, repo: String, issueList: List<Item.Issue>) {
+    suspend fun insertGithubRepoToRoom(org: String, repo: String, issueList: List<Item.Issue>) {
         githubRepoDatabase.githubRepoDao().insert(GithubRepo(org, repo, issueList))
     }
 }

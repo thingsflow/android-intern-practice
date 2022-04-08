@@ -10,6 +10,8 @@ import com.thingsflow.internapplication.data.GithubRepoDatabase
 import com.thingsflow.internapplication.data.Item
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.launch
 import java.lang.Exception
@@ -59,27 +61,24 @@ class MainViewModel @Inject constructor(
         /* Coroutine flow version */
         viewModelScope.launch {
             try {
-                var issueList: List<Item.Issue>?
-                kotlinx.coroutines.withContext(Dispatchers.IO) {
-                    issueList = mainRepository.getIssuesRoom(orgName, repoName).single()
-                }
+                var issueList: List<Item.Issue>? = null
 
-                if (issueList != null) {
-                    Log.d("SUCCESS: Load data from room", "${issueList!!.size}")
-                }
+                // TODO: 검색한 org/repo가 처음 검색한 것일 때, room에 insert 후 collect 내부 코드가 이전에 검색했던 내역들에 대해 여러 번 실행됨
+                mainRepository.getIssuesRoom(orgName, repoName).collect {
+                    issueList = it?.issueList
 
-                if (issueList == null) {
-                    issueList = mainRepository.getIssuesFlow(orgName, repoName).single()
-                    Log.d("SUCCESS: Get issue by coroutine flow", "${issueList!!.size}")
-                    kotlinx.coroutines.withContext(Dispatchers.IO) {
+                    if (issueList != null) {
+                        Log.d("SUCCESS: Load data from room", "${orgName}/${repoName} : ${issueList!!.size}")
+                        setLoadedIssues(issueList!!, orgName, repoName)
+                    } else {
+                        issueList = mainRepository.getIssuesFlow(orgName, repoName).single()
+                        Log.d("SUCCESS: Get issue by coroutine flow", "${issueList!!.size}")
                         mainRepository.insertGithubRepoToRoom(orgName, repoName, issueList!!)
+                        Log.d("SUCCESS: Save issue to room", "${issueList!!.size}")
                     }
-                    Log.d("SUCCESS: Save issue to room", "${issueList!!.size}")
                 }
-
-                setLoadedIssues(issueList!!, orgName, repoName)
             } catch (e: Exception) {
-                Log.e("ERROR: Get issue by rxjava", "ERROR MESSAGE : ${e.message}")
+                Log.e("ERROR: Get issue by coroutine flow", "ERROR MESSAGE : ${e.message}")
                 _loadingError.value = true
             }
         }
