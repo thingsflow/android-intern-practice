@@ -2,16 +2,12 @@ package com.thingsflow.internapplication.data
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
-@Entity(tableName = "user")
 data class User (
-    @PrimaryKey
     @SerializedName("login")
     val id: String,
     @SerializedName("avatar_url")
-    @ColumnInfo(name = "profile_url")
     val profileUrl: String
 )
 

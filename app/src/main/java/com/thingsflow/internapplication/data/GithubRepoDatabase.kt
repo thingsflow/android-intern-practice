@@ -6,9 +6,7 @@ import androidx.room.TypeConverters
 
 @Database(
     entities = [
-        GithubRepo::class,
-        Item.Issue::class,
-        User::class
+        GithubRepo::class
     ],
     version = 1
 )
