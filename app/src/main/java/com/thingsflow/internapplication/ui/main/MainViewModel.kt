@@ -19,8 +19,9 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     //private val issueRepository: IssueRepository,
     private val issueRepositoryCoroutine: IssueRepositoryCoroutine,
+    private val issueRepositoryRoom: IssueRepositoryRoom
 ) : ViewModel() {
-    // TODO: Implement the ViewModel
+
     private val BANNER_IMG_URL =
         "https://s3.ap-northeast-2.amazonaws.com/hellobot-kr-test/image/main_logo.png"
     private val POS = 4
@@ -79,9 +80,9 @@ class MainViewModel @Inject constructor(
         //Coroutine
         viewModelScope.launch {
 
-            val repo = issueRepositoryCoroutine.getRepositoryRoom(organization, repository)
+            val issuesFromDatabase = issueRepositoryRoom.getIssueRoom(organization, repository)
 
-            if(repo == null){
+            if(issuesFromDatabase == null){
                 Log.d("getIssue", "Not in DB")
                 try {
                     val issues = issueRepositoryCoroutine.getIssues(organization, repository).single()
@@ -98,8 +99,7 @@ class MainViewModel @Inject constructor(
                     setRepositoryInfo(organization, repository)
                     _loadSuccess.value = true
 
-                    issueRepositoryCoroutine.insertRepositoryRoom(organization, repository)
-                    issueRepositoryCoroutine.insertIssueRoom(organization, repository, ArrayList(issues))
+                    issueRepositoryRoom.insertIssueRoom(organization, repository, ArrayList(issues))
 
                 } catch (e: Exception){
                     Log.d("getIssue", "fail : $e")
@@ -108,9 +108,8 @@ class MainViewModel @Inject constructor(
             }
             else{
                 Log.d("getIssue", "Is in DB")
-                val issues = issueRepositoryCoroutine.getIssueRoom(organization, repository)
 
-                itemList = ArrayList(issues.issueList)
+                itemList = ArrayList(issuesFromDatabase.issueList)
 
                 if (itemList.size >= POS) {
                     itemList.add(POS, Item.Image(BANNER_IMG_URL))
@@ -120,8 +119,6 @@ class MainViewModel @Inject constructor(
                 setRepositoryInfo(organization, repository)
                 _loadSuccess.value = true
             }
-
-
         }
     }
 

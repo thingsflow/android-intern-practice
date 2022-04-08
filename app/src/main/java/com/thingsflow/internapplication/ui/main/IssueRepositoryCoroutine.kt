@@ -9,9 +9,7 @@ import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 class IssueRepositoryCoroutine @Inject constructor(
-    private val retrofitInstance: GitHubApiCoroutine,
-    private val issueDao: IssueDao,
-    private val repositoryDao: RepositoryDao
+    private val retrofitInstance: GitHubApiCoroutine
 ) {
     suspend fun getIssues(
         organization: String,
@@ -21,34 +19,5 @@ class IssueRepositoryCoroutine @Inject constructor(
             val issueList = retrofitInstance.getIssue(organization, repository)
             emit(issueList)
         }.flowOn(Dispatchers.IO)
-    }
-
-    suspend fun getRepositoryRoom(
-        organization: String,
-        repository: String
-    ) : RepositoryInfo{
-        return repositoryDao.getRepository(organization, repository)
-    }
-
-    suspend fun getIssueRoom(
-        organization: String,
-        repository: String
-    ) : RepositoryWithIssue{
-        return issueDao.getRepoWithIssues(organization, repository)
-    }
-
-    suspend fun insertRepositoryRoom(
-        organization: String,
-        repository: String
-    ) {
-        repositoryDao.insertRepository(RepositoryInfo(organization, repository))
-    }
-
-    suspend fun insertIssueRoom(
-        organization: String,
-        repository: String,
-        issues: ArrayList<Item.IssueData>
-    ) {
-        issueDao.insertAllIssues(RepositoryWithIssue(organization, repository, issues))
     }
 }
