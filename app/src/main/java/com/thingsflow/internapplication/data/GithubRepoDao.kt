@@ -2,11 +2,12 @@ package com.thingsflow.internapplication.data
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy.REPLACE
 import androidx.room.Query
 
 @Dao
 interface GithubRepoDao {
-    @Insert
+    @Insert(onConflict = REPLACE)
     fun insert(githubRepo: GithubRepo)
 
     @Query("SELECT * FROM github_repo WHERE org_name = :orgName and repo_name = :repoName")
