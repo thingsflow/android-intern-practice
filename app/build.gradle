@@ -27,10 +27,6 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
-
-//        debug {
-//            resValue("string", "DB_PASSWORD_GITHUB_REPO", "password")
-//        }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -87,5 +83,4 @@ dependencies {
     kapt "android.arch.persistence.room:compiler:1.1.1"
     // optional - Test helpers
     testImplementation "androidx.room:room-testing:$room_version"
-//    debugImplementation 'com.amitshekhar.android:debug-db:1.0.6'
 }
