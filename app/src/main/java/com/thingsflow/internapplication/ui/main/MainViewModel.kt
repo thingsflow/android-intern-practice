@@ -1,18 +1,12 @@
 package com.thingsflow.internapplication.ui.main
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.thingsflow.internapplication.data.GithubRepo
-import com.thingsflow.internapplication.data.GithubRepoDatabase
 import com.thingsflow.internapplication.data.Item
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.single
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.lang.Exception
 import javax.inject.Inject
@@ -33,14 +27,40 @@ class MainViewModel @Inject constructor(
     val selectedIssue = _selectedIssue
     private val _eventStartDetailActivity = MutableLiveData<Event<Unit>>()
     val eventStartDetailActivity: LiveData<Event<Unit>> = _eventStartDetailActivity
+    private val _requestInfo = MutableLiveData<Pair<String, String>>()
+    private val requestInfo: LiveData<Pair<String, String>> = _requestInfo
 
-    companion object {
-        const val POS_BANNER = 4
-        const val URL_BANNER = "https://s3.ap-northeast-2.amazonaws.com/hellobot-kr-test/image/main_logo.png"
+    private val clearListCh = Channel<Unit>(Channel.CONFLATED)
+    private val issuesFlow: Flow<GithubRepo?> = flowOf(
+        clearListCh.receiveAsFlow().map { null },
+        requestInfo
+            .asFlow()
+            .flatMapLatest {
+                mainRepository.getIssuesRoom(it.first, it.second)
+            }
+    ).flattenMerge(2)
+
+    init {
+        viewModelScope.launch {
+            issuesFlow.collectLatest { githubRepo ->
+                if (githubRepo != null) {
+                    setLoadedIssues(githubRepo.issueList, githubRepo.orgName, githubRepo.repoName)
+                } else {
+                    requestInfo.value?.let {
+                        loadIssuesFromRemote(it.first, it.second)
+                    }
+                }
+            }
+        }
     }
 
     private fun loadIssues(orgName: String, repoName: String) {
-        // github api에서 issue 목록을 가져옴
+        _requestInfo.value = orgName to repoName
+    }
+
+    private fun loadIssuesFromRemote(orgName: String, repoName: String) {
+        Log.d("loadIssuesFromRemote", "orgName: $orgName, repoName: $repoName")
+
         /* Rxjava version
         mainRepository.getIssuesRx(orgName, repoName)
             .subscribeOn(Schedulers.io())
@@ -61,22 +81,10 @@ class MainViewModel @Inject constructor(
         /* Coroutine flow version */
         viewModelScope.launch {
             try {
-                var issueList: List<Item.Issue>? = null
-
-                // TODO: 검색한 org/repo가 처음 검색한 것일 때, room에 insert 후 collect 내부 코드가 이전에 검색했던 내역들에 대해 여러 번 실행됨
-                mainRepository.getIssuesRoom(orgName, repoName).collect {
-                    issueList = it?.issueList
-
-                    if (issueList != null) {
-                        Log.d("SUCCESS: Load data from room", "${orgName}/${repoName} : ${issueList!!.size}")
-                        setLoadedIssues(issueList!!, orgName, repoName)
-                    } else {
-                        issueList = mainRepository.getIssuesFlow(orgName, repoName).single()
-                        Log.d("SUCCESS: Get issue by coroutine flow", "${issueList!!.size}")
-                        mainRepository.insertGithubRepoToRoom(orgName, repoName, issueList!!)
-                        Log.d("SUCCESS: Save issue to room", "${issueList!!.size}")
-                    }
-                }
+                val issueList = mainRepository.getIssuesFlow(orgName, repoName).single()
+                Log.d("SUCCESS: Get issue by coroutine flow", "${issueList.size}")
+                mainRepository.insertGithubRepoToRoom(orgName, repoName, issueList)
+                Log.d("SUCCESS: Save issue to room", "${issueList.size}")
             } catch (e: Exception) {
                 Log.e("ERROR: Get issue by coroutine flow", "ERROR MESSAGE : ${e.message}")
                 _loadingError.value = true
@@ -111,5 +119,10 @@ class MainViewModel @Inject constructor(
     fun clickIssue(issueIdx: Int) {
         _selectedIssue.value = issues.value?.get(issueIdx) as Item.Issue
         _eventStartDetailActivity.value = Event(Unit)
+    }
+
+    companion object {
+        const val POS_BANNER = 4
+        const val URL_BANNER = "https://s3.ap-northeast-2.amazonaws.com/hellobot-kr-test/image/main_logo.png"
     }
 }
