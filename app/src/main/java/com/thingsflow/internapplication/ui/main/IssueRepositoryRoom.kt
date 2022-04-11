@@ -14,7 +14,6 @@ class IssueRepositoryRoom @Inject constructor(
         organization: String,
         repository: String
     ): Flow<RepositoryWithIssue?> {
-        Log.d("getIssue", "start getIssueInDatabase")
         return issueDao.getRepoWithIssues(organization, repository)
     }
 

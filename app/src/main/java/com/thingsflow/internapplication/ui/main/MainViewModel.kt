@@ -65,7 +65,6 @@ class MainViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            Log.d("getIssue", "init")
             issuesFlow.collectLatest {
                 Log.d("getIssue", "${it?.organization}/${it?.repository}")
                 if(it == null){
