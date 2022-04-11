@@ -38,7 +38,7 @@ class ChangeTitleDialog: DialogFragment() {
             val orgInput = binding.organizationInput.text.toString()
             val repoInput = binding.repositoryInput.text.toString()
 
-            viewModel.setIssueList(orgInput, repoInput)
+            viewModel.setRepositoryInfo(orgInput, repoInput)
 
             dismiss()
         }

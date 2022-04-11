@@ -55,9 +55,10 @@ class MainFragment : Fragment() {
             showChangeTitleDialog()
         }
 
-        issueRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        issueRecyclerView.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
-        issueListAdapter = IssueListAdapter(object : IssueSelectedListener{
+        issueListAdapter = IssueListAdapter(object : IssueSelectedListener {
             override fun onIssueSelected(issuePos: Int) {
                 viewModel.userClickIssue(issuePos)
             }
@@ -77,17 +78,21 @@ class MainFragment : Fragment() {
             issueListAdapter.submitList(it)
         })
         loadSuccess.observe(viewLifecycleOwner, Observer {
-            if(it == false){
+            if (it == false) {
                 showErrorDialog()
-                if(viewModel.repositoryInfo.value != null){
-                    setIssueList(
-                        viewModel.repositoryInfo.value!!.organization,
-                        viewModel.repositoryInfo.value!!.repository
+                if (viewModel.repositoryInfo.value != null) {
+//                    setIssueList(
+//                        viewModel.repositoryInfo.value!!.organization,
+//                        viewModel.repositoryInfo.value!!.repository
+//                    )
+                    setRepositoryInfo(
+                        viewModel.organization.value!!,
+                        viewModel.repository.value!!
                     )
                 }
             }
         })
-        eventNavigateToDetail.observe(viewLifecycleOwner, EventObserver{
+        eventNavigateToDetail.observe(viewLifecycleOwner, EventObserver {
             val action = MainFragmentDirections.actionMainToDetail(it)
             Navigation.findNavController(requireView()).navigate(action)
         })
