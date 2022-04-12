@@ -1,6 +1,0 @@
-[submodule "app/common/android-list-kit"]
-	path = app/common/android-list-kit
-	url = https://github.com/thingsflow/android-list-kit.git
-[submodule "app/common/android-architecture-kit"]
-	path = app/common/android-architecture-kit
-	url = https://github.com/thingsflow/android-architecture-kit.git
