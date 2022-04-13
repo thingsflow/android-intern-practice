@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+                                                                   
+
+    
+
+                 
+                            
+                                                                         
+
+           
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"  android:tag="layout/example_databinding_0" xmlns:android="http://schemas.android.com/apk/res/android"/>
+         

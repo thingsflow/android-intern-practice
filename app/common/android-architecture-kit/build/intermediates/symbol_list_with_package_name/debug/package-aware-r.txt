@@ -1,0 +1,3 @@
+com.thingsflow.app.architecture
+layout example_databinding
+style FullScreenDialog
