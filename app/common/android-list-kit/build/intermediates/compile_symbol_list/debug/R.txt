@@ -1,0 +1,2 @@
+int id view_pager_infinite 0x0
+int layout layout_viewpager 0x0

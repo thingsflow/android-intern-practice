@@ -1,0 +1,3 @@
+com.thingsflow.app.ui.list
+id view_pager_infinite
+layout layout_viewpager
