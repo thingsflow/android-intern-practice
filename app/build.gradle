@@ -8,6 +8,10 @@ plugins {
 android {
     compileSdk 32
 
+    buildFeatures {
+        viewBinding = true
+    }
+
     defaultConfig {
         applicationId "com.thingsflow.internapplication"
         minSdk 25
@@ -33,6 +37,15 @@ android {
     }
     dataBinding {
         enabled = true
+    }
+}
+
+apply plugin: 'com.apollographql.apollo'
+
+kapt {
+    javacOptions {
+        option("-Adagger.fastInit=ENABLED")
+        option("-Adagger.hilt.android.internal.disableAndroidSuperclassValidation=true")
     }
 }
 
@@ -70,4 +83,9 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
+    implementation("com.apollographql.apollo:apollo-runtime:$apollo_version")
+
+    // If not already on your classpath, you might need the jetbrains annotations
+    compileOnly("org.jetbrains:annotations:13.0")
+    testCompileOnly("org.jetbrains:annotations:13.0")
 }
