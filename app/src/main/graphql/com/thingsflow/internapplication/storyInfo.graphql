@@ -1,0 +1,12 @@
+query {
+    listStoryByApp(data: { pageSize:1000 , sectionType: OnStage }) {
+        list {
+            storyId
+            name
+            mainImageFile {
+                link
+            }
+            oneLineDesc
+        }
+    }
+}
