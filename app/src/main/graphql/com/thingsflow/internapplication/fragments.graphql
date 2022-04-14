@@ -1,0 +1,8 @@
+fragment StoryDto on Story{
+    storyId
+    name
+    mainImageFile {
+        link
+    }
+    oneLineDesc
+}

@@ -1,5 +1,6 @@
 package com.thingsflow.internapplication.ui.main
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
@@ -33,12 +34,19 @@ class HomeFragment @Inject constructor() : BaseFragment<HomeViewModel, HomeFragm
 
     override fun setupUi() {
         viewModel.setTestText("set test text")
+        viewModel.loadTest()
+
     }
 
     override fun observeUi() {
         with(viewModel) {
             observe(testText) {
                 binding.message.text = it
+            }
+            observe(novelList){ item ->
+                item.forEach {
+                    Log.d("CHECK_LIST", "${it.title}")
+                }
             }
         }
     }

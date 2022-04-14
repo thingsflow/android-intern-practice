@@ -1,12 +1,13 @@
 {
-  "name": "Untitled GraphQL Schema",
-  "schemaPath": "schema.graphql",
+  "name": "StoryPlay GraphQL Schema",
+  "schemaPath": "schema.json",
   "extensions": {
     "endpoints": {
       "Default GraphQL Endpoint": {
-        "url": "http://localhost:8080/graphql",
+        "url": "https://dev-api.storyplay.com/graphql",
         "headers": {
-          "user-agent": "JS GraphQL"
+          "user-agent": "JS GraphQL",
+          "Cookie": "token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjQzMDU0LCJ0cyI6MTY0OTc0MzI2OTQ0Mywib25seU9UUCI6ZmFsc2UsImlhdCI6MTY0OTc0MzI2OSwiZXhwIjozNTQxOTAzMjY5fQ.gfI2OS3tZA5JOviCcaCftyJUagLltwObvuxSuSOX-7w"
         },
         "introspect": false
       }
