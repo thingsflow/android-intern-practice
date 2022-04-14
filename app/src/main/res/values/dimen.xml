@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="item_novel_cover_radius">20dp</dimen>
+    <dimen name="novel_cover_title_text_size">20sp</dimen>
+    <dimen name="novel_cover_desc_text_size">16sp</dimen>
+</resources>
