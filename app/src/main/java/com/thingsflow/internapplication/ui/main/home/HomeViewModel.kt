@@ -10,13 +10,17 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val getOnStageNovelCoversUseCase: GetOnStageNovelCoversUseCase
+//    private val getOnStageNovelCoversUseCase: GetOnStageNovelCoversUseCase
 ) : BaseRxViewModel() {
     // TODO: Implement the ViewModel
-    private val _onStageNovelCovers = MutableLiveData<OnStageNovelCover>()
-    val onStageNovelCovers: LiveData<OnStageNovelCover> = _onStageNovelCovers
+    private val _onStageNovelCoversByGenre = MutableLiveData<ArrayList<OnStageNovelCover>>()
+    val onStageNovelCoversByGenre: LiveData<ArrayList<OnStageNovelCover>> = _onStageNovelCoversByGenre
 
     fun load() {
         // TODO: Implement
+        _onStageNovelCoversByGenre.value = ArrayList()
+        for (i in 1..10) {
+            _onStageNovelCoversByGenre.value?.add(OnStageNovelCover(1, ", ", ", ", false, "aa"))
+        }
     }
 }

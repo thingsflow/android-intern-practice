@@ -3,6 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
     id 'kotlin-android-extensions'
+    id 'com.apollographql.apollo'
 }
 
 android {
@@ -39,8 +40,6 @@ android {
         enabled = true
     }
 }
-
-apply plugin: 'com.apollographql.apollo'
 
 kapt {
     javacOptions {
