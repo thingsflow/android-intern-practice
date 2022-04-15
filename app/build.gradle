@@ -82,4 +82,7 @@ dependencies {
     implementation "com.apollographql.apollo:apollo-android-support:$apollo_version"
     implementation "com.apollographql.apollo:apollo-rx3-support:$apollo_version"
 
+    implementation "com.github.bumptech.glide:glide:$glide_version"
+    annotationProcessor "com.github.bumptech.glide:compiler:$glide_version"
+
 }
