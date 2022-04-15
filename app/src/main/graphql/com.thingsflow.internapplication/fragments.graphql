@@ -1,0 +1,12 @@
+fragment StoryDto on Story {
+    storyId
+    name
+    shortDesc
+    isFinished
+    wideImageFile {
+        link
+    }
+    mainImageFile {
+        link
+    }
+}

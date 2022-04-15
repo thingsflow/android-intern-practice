@@ -1,0 +1,16 @@
+{
+  "name": "StoryPlay Android Intern Application GraphQL Schema",
+  "schemaPath": "schema.json",
+  "extensions": {
+    "endpoints": {
+      "Default GraphQL Endpoint": {
+        "url": "https://dev-api.storyplay.com/graphql",
+        "headers": {
+          "user-agent": "JS GraphQL",
+          "Cookie": "token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjQzMDE5LCJ0cyI6MTY0OTc0NjA1NTc0OCwib25seU9UUCI6ZmFsc2UsImlhdCI6MTY0OTc0NjA1NSwiZXhwIjozNTQxOTA2MDU1fQ.GsvdOULoekfDNx4Nv9mJC1QIiWDR4Lzowq1kbYlFBIo"
+        },
+        "introspect": false
+      }
+    }
+  }
+}

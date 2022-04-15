@@ -1,6 +1,5 @@
 package com.thingsflow.internapplication.ui.main.home
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
@@ -12,8 +11,9 @@ import com.thingsflow.internapplication.base.ui.list.adapter.AutoBindHolderFacto
 import com.thingsflow.internapplication.base.ui.list.adapter.IntervalItemDecoration
 import com.thingsflow.internapplication.base.ui.list.adapter.buildAdapter
 import com.thingsflow.internapplication.databinding.MainFragmentBinding
-import com.thingsflow.internapplication.model.OnStageNovelCover
+import com.thingsflow.internapplication.model.OnStageStory
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<HomeViewModel, MainFragmentBinding>() {
@@ -28,13 +28,13 @@ class HomeFragment : BaseFragment<HomeViewModel, MainFragmentBinding>() {
         HomeEvent(viewModel)
     }
 
-    private val novelCoverAdapter by lazy {
-        AutoBindHolderFactory<OnStageNovelCover>()
+    private val storyAdapter by lazy {
+        AutoBindHolderFactory<OnStageStory>()
             .add(
-                OnStageNovelCover::class,
-                NovelCoverHolder.DIFF,
+                OnStageStory::class,
+                StoriesHolder.DIFF,
                 event,
-                NovelCoverHolder.CREATOR
+                StoriesHolder.CREATOR
             )
             .buildAdapter()
     }
@@ -45,7 +45,7 @@ class HomeFragment : BaseFragment<HomeViewModel, MainFragmentBinding>() {
 
     override fun setupUi() = with(binding) {
         recyclerByGenre.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        recyclerByGenre.adapter = novelCoverAdapter
+        recyclerByGenre.adapter = storyAdapter
         val padding = 15f.dpToPx(requireContext())
         recyclerByGenre.addItemDecoration(
             IntervalItemDecoration(
@@ -56,14 +56,14 @@ class HomeFragment : BaseFragment<HomeViewModel, MainFragmentBinding>() {
         )
     }
 
-    private fun renderNovelCoverByGenreList(list: List<OnStageNovelCover>) {
-        novelCoverAdapter.submitList(list)
+    private fun renderStoryByGenreList(list: List<OnStageStory>) {
+        storyAdapter.submitList(list)
     }
 
     override fun observeUi() {
         with(viewModel) {
-            observe(onStageNovelCoversByGenre) {
-                renderNovelCoverByGenreList(it)
+            observe(onStageStoriesByGenre) {
+                renderStoryByGenreList(it)
             }
         }
     }
