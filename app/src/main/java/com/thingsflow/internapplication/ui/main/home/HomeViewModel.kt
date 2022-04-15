@@ -22,12 +22,6 @@ class HomeViewModel @Inject constructor(
     val onStageStoriesByGenre: LiveData<ArrayList<OnStageStory>> = _onStageStoriesByGenre
 
     fun load() {
-        // TODO: Implement
-//        _onStageStoriesByGenre.value = ArrayList()
-//        for (i in 1..10) {
-//            _onStageStoriesByGenre.value?.add(OnStageStory(1, ", ", ", ", "", false, ""))
-//        }
-
         getOnStageStoriesUseCase.invoke(Unit)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
