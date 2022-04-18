@@ -20,6 +20,28 @@ class WholeSectionHolder(
 ) : AutoBindViewHolder<WholeSectionItem, WholeSectionHolder.Event>(containerView, holderEvent) {
     private val binding = ItemWholeSectionBinding.bind(containerView)
 
+    private val storyAdapter by lazy {
+        AutoBindHolderFactory<OnStageStory>()
+            .add(
+                OnStageStory::class,
+                StoriesHolder.DIFF,
+                event,
+                StoriesHolder.CREATOR
+            )
+            .buildAdapter()
+    }
+
+    private val topBannerAdapter by lazy {
+        AutoBindHolderFactory<OnStageStory>()
+            .add(
+                OnStageStory::class,
+                TopBannerViewPagerHolder.DIFF,
+                event,
+                TopBannerViewPagerHolder.CREATOR
+            )
+            .buildViewPagerAdapter()
+    }
+
     override fun bind(item: WholeSectionItem) {
         renderUi(item)
     }
@@ -27,36 +49,13 @@ class WholeSectionHolder(
     private fun renderUi(item: WholeSectionItem) {
         val event = HomeEvent()
 
-        val storyAdapter by lazy {
-            AutoBindHolderFactory<OnStageStory>()
-                .add(
-                    OnStageStory::class,
-                    StoriesHolder.DIFF,
-                    event,
-                    StoriesHolder.CREATOR
-                )
-                .buildAdapter()
-        }
-
-        val topBannerAdapter by lazy {
-            AutoBindHolderFactory<OnStageStory>()
-                .add(
-                    OnStageStory::class,
-                    TopBannerViewPagerHolder.DIFF,
-                    event,
-                    TopBannerViewPagerHolder.CREATOR
-                )
-                .buildViewPagerAdapter()
-        }
-
-        setupUi(storyAdapter, topBannerAdapter)
+        setupUi()
 
         storyAdapter.submitList(item.onStageStoriesByGenre)
         topBannerAdapter.submitList(item.topBannerStories)
-
     }
 
-    private fun setupUi(storyAdapter: AutoBindListAdapter<OnStageStory>, topBannerAdapter: AutoBindViewPagerAdapter<OnStageStory>): Unit = with(binding) {
+    private fun setupUi(): Unit = with(binding) {
         recyclerByGenre.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = storyAdapter
