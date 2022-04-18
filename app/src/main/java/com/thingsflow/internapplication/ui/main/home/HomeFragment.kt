@@ -6,6 +6,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.tabs.TabLayoutMediator
+import com.thingsflow.internapplication.MainActivity
+import com.thingsflow.internapplication.base.architecture.aac.event
 import com.thingsflow.internapplication.base.architecture.aac.observe
 import com.thingsflow.internapplication.base.architecture.base.dpToPx
 import com.thingsflow.internapplication.base.architecture.base.viewbinding.BaseFragment
@@ -15,6 +17,8 @@ import com.thingsflow.internapplication.base.ui.list.adapter.buildAdapter
 import com.thingsflow.internapplication.base.ui.list.adapter.buildViewPagerAdapter
 import com.thingsflow.internapplication.databinding.MainFragmentBinding
 import com.thingsflow.internapplication.model.OnStageStory
+import com.thingsflow.internapplication.utils.hideLoading
+import com.thingsflow.internapplication.utils.showLoading
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.layout_viewpager.view.*
 
@@ -98,6 +102,11 @@ class HomeFragment : BaseFragment<HomeViewModel, MainFragmentBinding>() {
             }
             observe(topBannerStories) {
                 renderTopBannerList(it)
+            }
+
+            event(loadingEvent) {
+                if (it) showLoading()
+                else hideLoading()
             }
         }
     }

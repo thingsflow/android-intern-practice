@@ -3,6 +3,7 @@ package com.thingsflow.internapplication.ui.main.home
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.thingsflow.internapplication.base.architecture.aac.Event
 import com.thingsflow.internapplication.base.architecture.base.BaseRxViewModel
 import com.thingsflow.internapplication.model.OnStageStory
 import com.thingsflow.internapplication.usecase.GetOnStageStoriesUseCase
@@ -23,9 +24,13 @@ class HomeViewModel @Inject constructor(
     val topBannerStories: LiveData<ArrayList<OnStageStory>> = _topBannerStories
 
     fun load() {
+        _loadingEvent.value = Event(true)
         getOnStageStoriesUseCase.invoke(Unit)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
+            .doFinally {
+                _loadingEvent.value = Event(false)
+            }
             .subscribeBy(
                 onError = {
                     Log.e("Error: getOnStageStoriesUseCase", it.message ?: "")
