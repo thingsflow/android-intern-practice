@@ -1,0 +1,17 @@
+query StoryList {
+    storyList: listStoryByApp(data: { pageSize:1000 , sectionType: OnStage }) {
+        list {
+#            storyId
+#            name
+#            shortDesc
+#            isFinished
+#            wideImageFile {
+#                link
+#            }
+#            mainImageFile {
+#                link
+#            }
+            ...StoryDto
+        }
+    }
+}

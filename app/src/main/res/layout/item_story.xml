@@ -14,7 +14,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/novel_cover_image"
+            android:id="@+id/story_wide_image"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
@@ -30,7 +30,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/cardView2"
+            android:id="@+id/finish_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:cardBackgroundColor="@color/primary_100"
@@ -49,11 +49,11 @@
         </androidx.cardview.widget.CardView>
 
         <TextView
-            android:id="@+id/novel_cover_title"
+            android:id="@+id/story_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="제목이 한 줄일 때"
-            android:textSize="@dimen/novel_cover_title_text_size"
+            android:textSize="@dimen/story_title_text_size"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/cardView2"
@@ -61,12 +61,12 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
-        android:id="@+id/novel_cover_desc"
+        android:id="@+id/story_desc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
         android:text="궁녀가 되어 금혼령을 없애라"
-        android:textSize="@dimen/novel_cover_desc_text_size"
+        android:textSize="@dimen/story_desc_text_size"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title_layout" />
 </androidx.constraintlayout.widget.ConstraintLayout>
