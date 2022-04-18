@@ -9,4 +9,7 @@ fragment StoryDto on Story {
     mainImageFile {
         link
     }
+    introImageFile {
+        link
+    }
 }

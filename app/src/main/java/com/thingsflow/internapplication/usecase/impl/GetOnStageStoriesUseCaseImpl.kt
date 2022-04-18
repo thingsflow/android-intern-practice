@@ -8,11 +8,16 @@ import io.reactivex.rxjava3.core.Observable
 import javax.inject.Inject
 
 class GetOnStageStoriesUseCaseImpl @Inject constructor(
-    private val apiService: ApiService
+    private val apiService: ApiService,
+    private val storyMapper: StoryMapper
 ) : GetOnStageStoriesUseCase {
     override fun invoke(args: Unit): Observable<List<OnStageStory>> {
         return Observable.defer {
-            apiService.getStoriesData()
+            apiService.getStoriesData().map { list ->
+                list.map {
+                    storyMapper.map(it)
+                }
+            }
         }
     }
 }

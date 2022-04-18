@@ -31,18 +31,20 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/finish_icon"
-            android:layout_width="wrap_content"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
             app:cardBackgroundColor="@color/primary_100"
             app:cardCornerRadius="20dp"
+            app:cardElevation="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:padding="5dp"
+                android:layout_gravity="center"
                 android:text="완결"
                 android:textColor="@color/primary_500"
                 android:textStyle="bold" />
@@ -55,8 +57,9 @@
             android:text="제목이 한 줄일 때"
             android:textSize="@dimen/story_title_text_size"
             android:textStyle="bold"
+            android:layout_marginLeft="@dimen/left_margin_genre_section_text"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/cardView2"
+            app:layout_constraintStart_toEndOf="@+id/finish_icon"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -67,6 +70,7 @@
         android:layout_marginTop="2dp"
         android:text="궁녀가 되어 금혼령을 없애라"
         android:textSize="@dimen/story_desc_text_size"
+        android:layout_marginLeft="@dimen/left_margin_genre_section_text"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title_layout" />
 </androidx.constraintlayout.widget.ConstraintLayout>
