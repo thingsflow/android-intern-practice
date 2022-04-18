@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="banner_novel_title_text_size">24dp</dimen>
+    <dimen name="banner_novel_desc_text_size">14dp</dimen>
+
+    <dimen name="view_pager_indicator_left_margin">10dp</dimen>
+    <dimen name="view_pager_indicator_bottom_margin">196dp</dimen>
+    <dimen name="banner_left_margin">16dp</dimen>
+</resources>
