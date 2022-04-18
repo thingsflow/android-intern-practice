@@ -10,4 +10,8 @@
 
     <color name="indicator_gray">#7E8185</color>
     <color name="indicator_white">#FFFFFF</color>
+
+    <color name="is_finished_text_color">#753BBD</color>
+    <color name="is_finished_background_color">#F3E8FF</color>
+    <color name="genre_novel_desc_color">#7E8185</color>
 </resources>
