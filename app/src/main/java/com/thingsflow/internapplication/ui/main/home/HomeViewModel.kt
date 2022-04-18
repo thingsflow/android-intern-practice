@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.thingsflow.internapplication.base.architecture.aac.Event
 import com.thingsflow.internapplication.base.architecture.base.BaseRxViewModel
-import com.thingsflow.internapplication.model.OnStageStory
+import com.thingsflow.internapplication.model.WholeSectionItem
 import com.thingsflow.internapplication.usecase.GetOnStageStoriesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -17,11 +17,8 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val getOnStageStoriesUseCase: GetOnStageStoriesUseCase,
 ) : BaseRxViewModel() {
-    private val _onStageStoriesByGenre = MutableLiveData<ArrayList<OnStageStory>>()
-    val onStageStoriesByGenre: LiveData<ArrayList<OnStageStory>> = _onStageStoriesByGenre
-
-    private val _topBannerStories = MutableLiveData<ArrayList<OnStageStory>>()
-    val topBannerStories: LiveData<ArrayList<OnStageStory>> = _topBannerStories
+    private val _wholeSectionItems = MutableLiveData<ArrayList<WholeSectionItem>>()
+    val wholeSectionItems: LiveData<ArrayList<WholeSectionItem>> = _wholeSectionItems
 
     fun load() {
         _loadingEvent.value = Event(true)
@@ -35,13 +32,22 @@ class HomeViewModel @Inject constructor(
                 onError = {
                     Log.e("Error: getOnStageStoriesUseCase", it.message ?: "")
                 }, onNext = {
-                    _onStageStoriesByGenre.value = ArrayList(it.subList(1, it.size))
-                    _topBannerStories.value = ArrayList(it.subList(1, 1 + TOP_BANNER_STORIES_SIZE))
+                    val list = ArrayList<WholeSectionItem>()
+                    for (i in 0..WHOLE_SECTION_NUM) {
+                        list.add(WholeSectionItem(
+                            i,
+                            ArrayList(it.subList(1, it.size)),
+                            ArrayList(it.subList(1, 1 + TOP_BANNER_STORIES_SIZE))
+                        ))
+                    }
+
+                    _wholeSectionItems.value = list
                 }
             )
     }
 
     companion object {
         const val TOP_BANNER_STORIES_SIZE = 3
+        const val WHOLE_SECTION_NUM = 5
     }
 }

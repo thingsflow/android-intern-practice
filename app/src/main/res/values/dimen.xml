@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="item_novel_cover_radius">20dp</dimen>
-    <dimen name="story_title_text_size">20sp</dimen>
-    <dimen name="story_desc_text_size">16sp</dimen>
+    <dimen name="story_title_text_size">18sp</dimen>
+    <dimen name="story_desc_text_size">14sp</dimen>
     <dimen name="left_margin_genre_section_text">10dp</dimen>
+    <dimen name="genre_section_item_size">300dp</dimen>
 </resources>

@@ -54,7 +54,6 @@ class StoriesHolder(
             ): Boolean {
                 return oldItem == newItem
             }
-
         }
     }
 
