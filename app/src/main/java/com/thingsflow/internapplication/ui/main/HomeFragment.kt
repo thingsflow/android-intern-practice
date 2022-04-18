@@ -64,11 +64,11 @@ class HomeFragment @Inject constructor() : BaseFragment<HomeViewModel, HomeFragm
     }
 
     override fun loadData() {
-
+        viewModel.loadNovelList()
     }
 
     override fun setupUi() {
-        viewModel.loadNovelList()
+
     }
 
     override fun observeUi() {

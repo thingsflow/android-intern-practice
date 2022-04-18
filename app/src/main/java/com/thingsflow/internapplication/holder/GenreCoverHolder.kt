@@ -18,9 +18,7 @@ class GenreCoverHolder (
 
     private var binding = GenreCoverItemBinding.bind(containerView)
 
-    interface Event : HolderEvent{
-
-    }
+    interface Event : HolderEvent
 
     override fun bind(item: NovelCover) {
         renderUi(item)
