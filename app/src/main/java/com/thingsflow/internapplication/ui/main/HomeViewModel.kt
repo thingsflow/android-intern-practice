@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.thingsflow.internapplication.base.architecture.base.BaseRxViewModel
+import com.thingsflow.internapplication.data.model.HomeSection
 import com.thingsflow.internapplication.data.model.NovelCover
 import com.thingsflow.internapplication.mapper.NovelCoverMapper
 import com.thingsflow.internapplication.usecase.GetStoryListUseCase
@@ -23,6 +24,9 @@ class HomeViewModel @Inject constructor(
     private val _novelList = MutableLiveData<List<NovelCover>>()
     val novelList : LiveData<List<NovelCover>> = _novelList
 
+    private val _sectionList = MutableLiveData<List<HomeSection>>()
+    val sectionList : LiveData<List<HomeSection>> = _sectionList
+
     fun loadNovelList(){
         getStoryListUseCase.invoke(Unit)
             .subscribeOn(Schedulers.io())
@@ -33,6 +37,14 @@ class HomeViewModel @Inject constructor(
                 },
                 onNext = {
                     _novelList.value = novelCoverMapper.map(it.storyList)
+
+                    val itemList: MutableList<HomeSection> = mutableListOf()
+
+                    for(i in 0..5){
+                        itemList.add(i, HomeSection(novelList.value!!, novelList.value!!))
+                    }
+
+                    _sectionList.value = itemList
                 }
             ).addTo(compositeDisposable)
     }
