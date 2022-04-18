@@ -5,13 +5,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.tabs.TabLayoutMediator
 import com.thingsflow.internapplication.base.architecture.aac.observe
 import com.thingsflow.internapplication.base.architecture.base.viewbinding.BaseFragment
 import com.thingsflow.internapplication.base.ui.list.adapter.AutoBindHolderFactory
+import com.thingsflow.internapplication.base.ui.list.adapter.buildAdapter
 import com.thingsflow.internapplication.base.ui.list.adapter.buildViewPagerAdapter
 import com.thingsflow.internapplication.data.model.NovelCover
 import com.thingsflow.internapplication.databinding.HomeFragmentBinding
+import com.thingsflow.internapplication.holder.GenreCoverHolder
 import com.thingsflow.internapplication.holder.StoryCoverHolder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.layout_viewpager.view.*
@@ -45,6 +48,17 @@ class HomeFragment @Inject constructor() : BaseFragment<HomeViewModel, HomeFragm
             .buildViewPagerAdapter()
     }
 
+    private val genreAdapter by lazy {
+        AutoBindHolderFactory<NovelCover>()
+            .add(
+                NovelCover::class,
+                GenreCoverHolder.DIFF,
+                event,
+                GenreCoverHolder.CREATOR
+            )
+            .buildAdapter()
+    }
+
     private fun backPressed() {
         Toast.makeText(requireContext(), "Back Pressed", Toast.LENGTH_SHORT).show()
     }
@@ -61,6 +75,7 @@ class HomeFragment @Inject constructor() : BaseFragment<HomeViewModel, HomeFragm
         with(viewModel) {
             observe(novelList) { item ->
                 renderBannerNovelList(item)
+                renderGenreNovelList(item)
             }
         }
     }
@@ -97,11 +112,19 @@ class HomeFragment @Inject constructor() : BaseFragment<HomeViewModel, HomeFragm
                     tab.view.visibility = View.GONE
                 }
             }.attach()
-
         }
-
-
     }
 
+    private fun renderGenreNovelList(list: List<NovelCover>){
+
+        genreAdapter.submitList(list)
+
+        with(binding){
+            genreRecyclerView.apply {
+                adapter = genreAdapter
+                layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            }
+        }
+    }
 
 }

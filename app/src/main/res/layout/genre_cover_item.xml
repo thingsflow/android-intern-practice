@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="240dp"
+    android:layout_height="match_parent"
+    android:layout_marginStart="8dp"
+    app:layout_constraintDimensionRatio="240:180"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ImageView
+        android:id="@+id/coverImg"
+        android:layout_width="240dp"
+        android:layout_height="130dp"
+        android:background="@drawable/genre_novel_cover_background"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/isFinished"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="완결"
+        android:textColor="@color/is_finished_text_color"
+        android:textSize="@dimen/is_finished_text_size"
+        android:background="@drawable/is_finished_background"
+        android:paddingHorizontal="7dp"
+        android:paddingVertical="3.5dp"
+        app:layout_constraintTop_toBottomOf="@id/coverImg"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/genreNovelTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="제목이 한 줄일 때"
+        android:textColor="@color/black"
+        android:textSize="@dimen/genre_novel_title_text_size"
+        app:layout_constraintTop_toBottomOf="@id/coverImg"
+        app:layout_constraintStart_toEndOf="@id/isFinished"/>
+
+    <TextView
+        android:id="@+id/genreNovelDesc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="궁녀가 되어 금혼령을 없애라"
+        android:textColor="@color/genre_novel_desc_color"
+        android:textSize="@dimen/genre_novel_desc_text_size"
+        app:layout_constraintTop_toBottomOf="@id/genreNovelTitle"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

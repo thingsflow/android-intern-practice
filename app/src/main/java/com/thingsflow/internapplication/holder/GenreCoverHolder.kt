@@ -9,16 +9,16 @@ import com.thingsflow.internapplication.R
 import com.thingsflow.internapplication.base.ui.list.adapter.AutoBindViewHolder
 import com.thingsflow.internapplication.base.ui.list.adapter.HolderEvent
 import com.thingsflow.internapplication.data.model.NovelCover
-import com.thingsflow.internapplication.databinding.StoryCoverItemBinding
+import com.thingsflow.internapplication.databinding.GenreCoverItemBinding
 
-class StoryCoverHolder(
+class GenreCoverHolder (
     containerView: View,
     holderEvent: HolderEvent
-) : AutoBindViewHolder<NovelCover, StoryCoverHolder.Event>(containerView, holderEvent) {
+) : AutoBindViewHolder<NovelCover, GenreCoverHolder.Event>(containerView, holderEvent) {
 
-    private var binding = StoryCoverItemBinding.bind(containerView)
+    private var binding = GenreCoverItemBinding.bind(containerView)
 
-    interface Event : HolderEvent {
+    interface Event : HolderEvent{
 
     }
 
@@ -27,24 +27,26 @@ class StoryCoverHolder(
     }
 
     private fun renderUi(item: NovelCover) = with(binding){
-        novelTitle.text = item.title
-        novelDesc.text = item.shortDesc
+        genreNovelTitle.text = item.title
+        genreNovelDesc.text = item.shortDesc
+
+        if(!item.isFinished){
+            isFinished.visibility = View.GONE
+        }
+
+        coverImg.clipToOutline = true
 
         Glide.with(this.root)
             .load(item.mainImgUrl)
             .centerCrop()
-            .into(this.bannerImg)
-
-        Glide.with(this.root)
-            .load(R.drawable.ic_logo)
-            .into(this.novelLogo)
+            .into(this.coverImg)
     }
 
-    companion object {
-        val CREATOR: (ViewGroup, HolderEvent) -> StoryCoverHolder = { parent, holderEvent ->
-            val view = LayoutInflater.from(parent.context).inflate(R.layout.story_cover_item, parent, false)
+    companion object{
+        val CREATOR: (ViewGroup, HolderEvent) -> GenreCoverHolder = { parent, holderEvent ->
+            val view = LayoutInflater.from(parent.context).inflate(R.layout.genre_cover_item, parent, false)
 
-            StoryCoverHolder(view, holderEvent)
+            GenreCoverHolder(view, holderEvent)
         }
 
         val DIFF = object : DiffUtil.ItemCallback<NovelCover>() {
