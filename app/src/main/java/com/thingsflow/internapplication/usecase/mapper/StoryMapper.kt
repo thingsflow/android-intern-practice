@@ -11,6 +11,7 @@ class StoryMapper @Inject constructor() {
             title = from.name,
             imageUrl = from.mainImageFile?.link ?: "",
             wideImageUrl = from.wideImageFile?.link ?: "",
+            introImageUrl = from.introImageFile?.link ?: "",
             isFinished = from.isFinished,
             shortDesc = from.shortDesc ?: ""
         )

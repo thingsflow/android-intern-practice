@@ -6,7 +6,6 @@ import com.apollographql.apollo.api.Response
 import com.apollographql.apollo.rx3.rx
 import com.thingsflow.internapplication.StoryListQuery
 import com.thingsflow.internapplication.fragment.StoryDto
-import com.thingsflow.internapplication.model.OnStageStory
 import io.reactivex.rxjava3.core.Observable
 import okhttp3.OkHttpClient
 import javax.inject.Inject
@@ -26,25 +25,29 @@ class ApiService @Inject constructor(
         )
         .build()
 
-    fun getStoriesData(): Observable<List<OnStageStory>> {
+    fun getStoriesData(): Observable<List<StoryDto>> {
         return apolloClient.query(StoryListQuery())
             .rx()
             .doOnNext(::handleError)
             .map { item ->
-                val list = mutableListOf<OnStageStory>()
-
+                val list = mutableListOf<StoryDto>()
                 item.data!!.storyList.list.forEach {
-                    list.add(
-                        OnStageStory(
-                            id = it.fragments.storyDto.storyId,
-                            title = it.fragments.storyDto.name,
-                            shortDesc = it.fragments.storyDto.shortDesc ?: "",
-                            isFinished = it.fragments.storyDto.isFinished,
-                            imageUrl = it.fragments.storyDto.mainImageFile?.link ?: "",
-                            wideImageUrl = it.fragments.storyDto.wideImageFile?.link ?: ""
-                        )
-                    )
+                    list.add(it.fragments.storyDto)
                 }
+//                val list = mutableListOf<OnStageStory>()
+//                item.data!!.storyList.list.forEach {
+//                    list.add(
+//                        OnStageStory(
+//                            id = it.fragments.storyDto.storyId,
+//                            title = it.fragments.storyDto.name,
+//                            shortDesc = it.fragments.storyDto.shortDesc ?: "",
+//                            isFinished = it.fragments.storyDto.isFinished,
+//                            imageUrl = it.fragments.storyDto.mainImageFile?.link ?: "",
+//                            wideImageUrl = it.fragments.storyDto.wideImageFile?.link ?: "",
+//                            introImageUrl = it.fragments.storyDto.introImageFile?.link ?: ""
+//                        )
+//                    )
+//                }
 
                 list
             }
