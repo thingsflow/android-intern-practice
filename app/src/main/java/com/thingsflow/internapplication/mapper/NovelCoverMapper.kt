@@ -17,7 +17,9 @@ class NovelCoverMapper @Inject constructor() {
             id = from.id,
             title = from.title,
             mainImgUrl = from.mainImgUrl,
-            oneLineDesc = from.oneLineDesc
+            oneLineDesc = from.oneLineDesc,
+            shortDesc = from.shortDesc,
+            isFinished = from.isFinished
         )
     }
 }

@@ -3,6 +3,7 @@ package com.thingsflow.internapplication.holder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.recyclerview.widget.DiffUtil
 import com.bumptech.glide.Glide
 import com.thingsflow.internapplication.R
@@ -27,11 +28,17 @@ class StoryCoverHolder(
     }
 
     private fun renderUi(item: NovelCover) = with(binding){
-        title.text = item.title
+        novelTitle.text = item.title
+        novelDesc.text = item.oneLineDesc
 
         Glide.with(this.root)
             .load(item.mainImgUrl)
+            .centerCrop()
             .into(this.bannerImg)
+
+        Glide.with(this.root)
+            .load(R.drawable.ic_logo)
+            .into(this.novelLogo)
     }
 
     companion object {

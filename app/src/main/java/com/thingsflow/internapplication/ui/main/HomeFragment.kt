@@ -1,21 +1,20 @@
 package com.thingsflow.internapplication.ui.main
 
-import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
-import com.bumptech.glide.Glide
-import com.thingsflow.internapplication.base.architecture.aac.event
+import com.google.android.material.tabs.TabLayoutMediator
 import com.thingsflow.internapplication.base.architecture.aac.observe
 import com.thingsflow.internapplication.base.architecture.base.viewbinding.BaseFragment
 import com.thingsflow.internapplication.base.ui.list.adapter.AutoBindHolderFactory
 import com.thingsflow.internapplication.base.ui.list.adapter.buildViewPagerAdapter
-import com.thingsflow.internapplication.base.ui.list.view.InfiniteViewPager2
 import com.thingsflow.internapplication.data.model.NovelCover
 import com.thingsflow.internapplication.databinding.HomeFragmentBinding
 import com.thingsflow.internapplication.holder.StoryCoverHolder
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.layout_viewpager.view.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -30,9 +29,10 @@ class HomeFragment @Inject constructor() : BaseFragment<HomeViewModel, HomeFragm
     override val backFunc: (() -> Unit)
         get() = ::backPressed
 
-    private val event by lazy{
+    private val event by lazy {
         HomeEvent(viewModel)
     }
+
 
     private val bannerAdapter by lazy {
         AutoBindHolderFactory<NovelCover>()
@@ -53,23 +53,14 @@ class HomeFragment @Inject constructor() : BaseFragment<HomeViewModel, HomeFragm
 
     }
 
-    override fun setupUi() = with(binding) {
-        bannerViewPager.setAdapter(bannerAdapter)
-        bannerViewPager.startAutoSlide(3000)
-        viewModel.loadTest()
-
+    override fun setupUi() {
+        viewModel.loadNovelList()
     }
 
     override fun observeUi() {
         with(viewModel) {
-            observe(testText) {
-                //binding.message.text = it
-            }
-            observe(novelList){ item ->
-                item.forEach {
-                    Log.d("CHECK_LIST", "${it.title}")
-                }
-                bannerAdapter.submitList(item)
+            observe(novelList) { item ->
+                renderBannerNovelList(item)
             }
         }
     }
@@ -79,6 +70,37 @@ class HomeFragment @Inject constructor() : BaseFragment<HomeViewModel, HomeFragm
         container: ViewGroup?
     ): HomeFragmentBinding {
         return HomeFragmentBinding.inflate(inflater, container, false)
+    }
+
+    private fun renderBannerNovelList(list: List<NovelCover>) {
+        val BANNER_AUTO_SLIDE_DURATION = 3000
+        val BANNER_ITEM_NUM = 3
+        val bannerNovelList: MutableList<NovelCover> = mutableListOf()
+
+        for (i in 0 until BANNER_ITEM_NUM) {
+            bannerNovelList.add(i, list[i])
+        }
+
+        bannerAdapter.submitList(bannerNovelList)
+
+        with(binding) {
+            bannerViewPager.apply {
+                setAdapter(bannerAdapter)
+                startAutoSlide(BANNER_AUTO_SLIDE_DURATION)
+            }
+
+            TabLayoutMediator(
+                viewPagerIndicator,
+                bannerViewPager.view_pager_infinite
+            ) { tab, position ->
+                if(position == 0 || position == bannerAdapter.itemCount - 1){
+                    tab.view.visibility = View.GONE
+                }
+            }.attach()
+
+        }
+
+
     }
 
 

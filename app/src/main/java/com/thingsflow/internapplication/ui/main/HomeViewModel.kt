@@ -20,17 +20,10 @@ class HomeViewModel @Inject constructor(
     private val novelCoverMapper: NovelCoverMapper
 ) : BaseRxViewModel() {
 
-    private val _testText = MutableLiveData<String>()
-    val testText : LiveData<String> = _testText
-
     private val _novelList = MutableLiveData<List<NovelCover>>()
     val novelList : LiveData<List<NovelCover>> = _novelList
 
-    fun setTestText(text: String){
-        _testText.value = text
-    }
-
-    fun loadTest(){
+    fun loadNovelList(){
         getStoryListUseCase.invoke(Unit)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

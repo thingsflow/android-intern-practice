@@ -11,7 +11,9 @@ class StoryEntityMapper @Inject constructor() {
             id = from.storyId,
             title = from.name,
             mainImgUrl = from.mainImageFile?.link ?:"",
-            oneLineDesc = from.oneLineDesc
+            oneLineDesc = from.oneLineDesc,
+            shortDesc = from.shortDesc ?: "",
+            isFinished = from.isFinished
         )
     }
 }
