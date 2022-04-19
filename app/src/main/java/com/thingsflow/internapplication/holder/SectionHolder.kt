@@ -49,10 +49,14 @@ class SectionHolder(
     }
 
     private fun renderUi(item: HomeSection) {
-        renderBannerNovelList(item.bannerNovel)
-        renderGenreNovelList(item.genreNovel)
+        if(item is HomeSection.BannerNovel){
+            renderBannerNovelList(item.bannerNovelList)
+        }
+        else if(item is HomeSection.GenreNovel){
+            renderGenreNovelList(item.genreNovelList)
+        }
     }
-
+    
     private fun renderBannerNovelList(list: List<NovelCover>) {
         val BANNER_AUTO_SLIDE_DURATION = 3000
         val BANNER_ITEM_NUM = 3
@@ -65,6 +69,12 @@ class SectionHolder(
         bannerAdapter.submitList(bannerNovelList)
 
         with(binding) {
+
+            genreRecyclerView.visibility = View.GONE
+            genreSectionTitle.visibility = View.GONE
+            bannerViewPager.visibility = View.VISIBLE
+            viewPagerIndicator.visibility = View.VISIBLE
+
             bannerViewPager.apply {
                 setAdapter(bannerAdapter)
                 startAutoSlide(BANNER_AUTO_SLIDE_DURATION)
@@ -85,6 +95,12 @@ class SectionHolder(
         genreAdapter.submitList(list)
 
         with(binding) {
+
+            genreRecyclerView.visibility = View.VISIBLE
+            genreSectionTitle.visibility = View.VISIBLE
+            bannerViewPager.visibility = View.GONE
+            viewPagerIndicator.visibility = View.GONE
+
             genreRecyclerView.apply {
                 adapter = genreAdapter
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
@@ -102,7 +118,13 @@ class SectionHolder(
 
         val DIFF = object : DiffUtil.ItemCallback<HomeSection>() {
             override fun areItemsTheSame(oldItem: HomeSection, newItem: HomeSection): Boolean {
-                return oldItem.bannerNovel == newItem.bannerNovel && oldItem.genreNovel == newItem.genreNovel
+                return if(oldItem is HomeSection.BannerNovel && newItem is HomeSection.BannerNovel){
+                    oldItem.bannerNovelList == newItem.bannerNovelList
+                } else if(oldItem is HomeSection.GenreNovel && newItem is HomeSection.GenreNovel){
+                    oldItem.genreNovelList == newItem.genreNovelList
+                } else{
+                    false
+                }
             }
 
             override fun areContentsTheSame(oldItem: HomeSection, newItem: HomeSection): Boolean {

@@ -1,6 +1,11 @@
 package com.thingsflow.internapplication.data.model
 
-data class HomeSection(
-    val bannerNovel: List<NovelCover>,
-    val genreNovel: List<NovelCover>
-)
+sealed class HomeSection{
+    data class BannerNovel(
+        val bannerNovelList: List<NovelCover>
+    ) : HomeSection()
+
+    data class GenreNovel(
+        val genreNovelList: List<NovelCover>
+    ) : HomeSection()
+}

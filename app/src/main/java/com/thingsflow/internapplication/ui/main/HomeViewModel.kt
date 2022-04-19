@@ -40,9 +40,13 @@ class HomeViewModel @Inject constructor(
 
                     val itemList: MutableList<HomeSection> = mutableListOf()
 
+                    itemList.add(HomeSection.BannerNovel(novelList.value!!))
+
                     for(i in 0..5){
-                        itemList.add(i, HomeSection(novelList.value!!, novelList.value!!))
+                        itemList.add(HomeSection.GenreNovel(novelList.value!!))
                     }
+
+                    itemList.add(HomeSection.BannerNovel(novelList.value!!))
 
                     _sectionList.value = itemList
                 }

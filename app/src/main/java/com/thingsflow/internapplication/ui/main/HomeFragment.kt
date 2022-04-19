@@ -34,7 +34,13 @@ class HomeFragment @Inject constructor() : BaseFragment<HomeViewModel, HomeFragm
     private val sectionAdapter by lazy {
         AutoBindHolderFactory<HomeSection>()
             .add(
-                HomeSection::class,
+                HomeSection.BannerNovel::class,
+                SectionHolder.DIFF,
+                event,
+                SectionHolder.CREATOR
+            )
+            .add(
+                HomeSection.GenreNovel::class,
                 SectionHolder.DIFF,
                 event,
                 SectionHolder.CREATOR
