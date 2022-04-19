@@ -5,8 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.thingsflow.internapplication.base.architecture.aac.Event
 import com.thingsflow.internapplication.base.architecture.base.BaseRxViewModel
-import com.thingsflow.internapplication.model.OnStageStory
-import com.thingsflow.internapplication.model.SectionItem
 import com.thingsflow.internapplication.model.WholeSectionItem
 import com.thingsflow.internapplication.usecase.GetOnStageStoriesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -36,8 +34,8 @@ class HomeViewModel @Inject constructor(
                 }, onNext = {
                     val list = ArrayList<WholeSectionItem>()
                     for (i in 0..WHOLE_SECTION_NUM) {
-                        list.add(WholeSectionItem(i, SectionItem.TopBannerItem, ArrayList(it.subList(1, TOP_BANNER_STORIES_SIZE + 1))))
-                        list.add(WholeSectionItem(i, SectionItem.OnStageStoryItem, ArrayList(it.subList(1, it.size))))
+                        list.add(WholeSectionItem.TopBannerItem(i, ArrayList(it.subList(1, TOP_BANNER_STORIES_SIZE + 1))))
+                        list.add(WholeSectionItem.OnStageStoryItem(i, ArrayList(it.subList(1, it.size))))
                     }
 
                     _wholeSectionItems.value = list

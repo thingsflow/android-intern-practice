@@ -35,7 +35,12 @@ class HomeFragment : BaseFragment<HomeViewModel, MainFragmentBinding>() {
     private val wholeSectionAdapter by lazy {
         AutoBindHolderFactory<WholeSectionItem>()
             .add(
-                WholeSectionItem::class,
+                WholeSectionItem.OnStageStoryItem::class,
+                WholeSectionHolder.DIFF,
+                event,
+                WholeSectionHolder.CREATOR
+            ).add(
+                WholeSectionItem.TopBannerItem::class,
                 WholeSectionHolder.DIFF,
                 event,
                 WholeSectionHolder.CREATOR

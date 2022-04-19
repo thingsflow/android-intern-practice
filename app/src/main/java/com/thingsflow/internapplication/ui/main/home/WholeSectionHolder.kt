@@ -11,7 +11,6 @@ import com.thingsflow.internapplication.base.architecture.base.dpToPx
 import com.thingsflow.internapplication.base.ui.list.adapter.*
 import com.thingsflow.internapplication.databinding.ItemWholeSectionBinding
 import com.thingsflow.internapplication.model.OnStageStory
-import com.thingsflow.internapplication.model.SectionItem
 import com.thingsflow.internapplication.model.WholeSectionItem
 import kotlinx.android.synthetic.main.layout_viewpager.view.*
 
@@ -50,14 +49,14 @@ class WholeSectionHolder(
     private fun renderUi(item: WholeSectionItem) {
         setupUi(item)
 
-        if (item.type == SectionItem.OnStageStoryItem)
+        if (item is WholeSectionItem.OnStageStoryItem)
             storyAdapter.submitList(item.stories)
-        else if (item.type == SectionItem.TopBannerItem)
+        else if (item is WholeSectionItem.TopBannerItem)
             topBannerAdapter.submitList(item.stories)
     }
 
     private fun setupUi(item: WholeSectionItem) = with(binding) {
-        if (item.type == SectionItem.OnStageStoryItem) {
+        if (item is WholeSectionItem.OnStageStoryItem) {
             topBannerViewPager.visibility = View.GONE
             tabLayout.visibility = View.GONE
             listLayout.visibility = View.VISIBLE
@@ -103,7 +102,9 @@ class WholeSectionHolder(
                 oldItem: WholeSectionItem,
                 newItem: WholeSectionItem
             ): Boolean {
-                return oldItem.type == newItem.type && oldItem.id == newItem.id
+                if (oldItem is WholeSectionItem.OnStageStoryItem && newItem is WholeSectionItem.OnStageStoryItem) return oldItem.id == newItem.id
+                else if (oldItem is WholeSectionItem.TopBannerItem && newItem is WholeSectionItem.TopBannerItem) return oldItem.id == newItem.id
+                return false
             }
 
             override fun areContentsTheSame(

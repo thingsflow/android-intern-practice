@@ -1,11 +1,15 @@
 package com.thingsflow.internapplication.model
 
-data class WholeSectionItem (
-    val id: Int,
-    val type: SectionItem,
-    val stories: ArrayList<OnStageStory>
-)
+sealed class WholeSectionItem (
+    open val id: Int
+) {
+    data class OnStageStoryItem (
+        override val id: Int,
+        val stories: List<OnStageStory>
+    ) : WholeSectionItem(id)
 
-enum class SectionItem {
-    OnStageStoryItem, TopBannerItem
+    data class TopBannerItem (
+        override val id: Int,
+        val stories: List<OnStageStory>
+    ) : WholeSectionItem(id)
 }
