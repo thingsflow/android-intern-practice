@@ -11,6 +11,7 @@ import com.thingsflow.internapplication.base.architecture.base.dpToPx
 import com.thingsflow.internapplication.base.ui.list.adapter.*
 import com.thingsflow.internapplication.databinding.ItemWholeSectionBinding
 import com.thingsflow.internapplication.model.OnStageStory
+import com.thingsflow.internapplication.model.SectionItem
 import com.thingsflow.internapplication.model.WholeSectionItem
 import kotlinx.android.synthetic.main.layout_viewpager.view.*
 
@@ -47,36 +48,45 @@ class WholeSectionHolder(
     }
 
     private fun renderUi(item: WholeSectionItem) {
-        val event = HomeEvent()
+        setupUi(item)
 
-        setupUi()
-
-        storyAdapter.submitList(item.onStageStoriesByGenre)
-        topBannerAdapter.submitList(item.topBannerStories)
+        if (item.type == SectionItem.OnStageStoryItem)
+            storyAdapter.submitList(item.stories)
+        else if (item.type == SectionItem.TopBannerItem)
+            topBannerAdapter.submitList(item.stories)
     }
 
-    private fun setupUi(): Unit = with(binding) {
-        recyclerByGenre.apply {
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            adapter = storyAdapter
-            val padding = 15f.dpToPx(context)
-            addItemDecoration(
-                IntervalItemDecoration(
-                    startOffset = padding,
-                    endOffset = padding,
-                    offset = padding
+    private fun setupUi(item: WholeSectionItem) = with(binding) {
+        if (item.type == SectionItem.OnStageStoryItem) {
+            topBannerViewPager.visibility = View.GONE
+            tabLayout.visibility = View.GONE
+            listLayout.visibility = View.VISIBLE
+            recyclerByGenre.apply {
+                layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                adapter = storyAdapter
+                val padding = 15f.dpToPx(context)
+                if (itemDecorationCount > 0) removeItemDecorationAt(0)
+                addItemDecoration(
+                    IntervalItemDecoration(
+                        startOffset = padding,
+                        endOffset = padding,
+                        offset = padding
+                    )
                 )
-            )
-        }
-
-        topBannerViewPager.apply {
-            setAdapter(topBannerAdapter)
-            startAutoSlide(HomeFragment.TOP_BANNER_SCROLL_DURATION)
-            TabLayoutMediator(tabLayout, view_pager_infinite) { tab, position ->
-                if (position == 0 || position == topBannerAdapter.itemCount - 1) {
-                    tab.view.visibility = View.GONE
-                }
-            }.attach()
+            }
+        } else {
+            topBannerViewPager.visibility = View.VISIBLE
+            tabLayout.visibility = View.VISIBLE
+            listLayout.visibility = View.GONE
+            topBannerViewPager.apply {
+                setAdapter(topBannerAdapter)
+                startAutoSlide(HomeFragment.TOP_BANNER_SCROLL_DURATION)
+                TabLayoutMediator(tabLayout, view_pager_infinite) { tab, position ->
+                    if (position == 0 || position == topBannerAdapter.itemCount - 1) {
+                        tab.view.visibility = View.GONE
+                    }
+                }.attach()
+            }
         }
     }
 
@@ -93,7 +103,7 @@ class WholeSectionHolder(
                 oldItem: WholeSectionItem,
                 newItem: WholeSectionItem
             ): Boolean {
-                return oldItem.id == newItem.id
+                return oldItem.type == newItem.type && oldItem.id == newItem.id
             }
 
             override fun areContentsTheSame(

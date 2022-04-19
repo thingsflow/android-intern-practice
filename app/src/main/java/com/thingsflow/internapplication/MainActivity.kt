@@ -3,9 +3,12 @@ package com.thingsflow.internapplication
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.PersistableBundle
+import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.navigation.NavigationBarView
 import com.thingsflow.internapplication.databinding.MainActivityBinding
 import com.thingsflow.internapplication.ui.main.home.HomeFragment
 import dagger.hilt.android.AndroidEntryPoint

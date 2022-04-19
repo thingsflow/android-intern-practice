@@ -1,5 +1,6 @@
 package com.thingsflow.internapplication.ui.main.home
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
@@ -27,11 +28,11 @@ class HomeFragment : BaseFragment<HomeViewModel, MainFragmentBinding>() {
 
     override val viewModel by viewModels<HomeViewModel>()
 
-    val event by lazy {
+    private val event by lazy {
         HomeEvent()
     }
 
-    val wholeSectionAdapter by lazy {
+    private val wholeSectionAdapter by lazy {
         AutoBindHolderFactory<WholeSectionItem>()
             .add(
                 WholeSectionItem::class,

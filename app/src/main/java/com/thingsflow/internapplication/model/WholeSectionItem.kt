@@ -2,6 +2,10 @@ package com.thingsflow.internapplication.model
 
 data class WholeSectionItem (
     val id: Int,
-    val onStageStoriesByGenre: ArrayList<OnStageStory>,
-    val topBannerStories: ArrayList<OnStageStory>
+    val type: SectionItem,
+    val stories: ArrayList<OnStageStory>
 )
+
+enum class SectionItem {
+    OnStageStoryItem, TopBannerItem
+}
