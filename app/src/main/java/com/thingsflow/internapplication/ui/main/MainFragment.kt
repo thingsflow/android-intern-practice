@@ -2,11 +2,17 @@ package com.thingsflow.internapplication.ui.main
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import com.thingsflow.internapplication.R
+import kotlinx.android.synthetic.main.main_fragment.*
+import android.os.CountDownTimer
 
 class MainFragment : Fragment() {
 
@@ -27,6 +33,8 @@ class MainFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         // TODO: Use the ViewModel
+        
+        message.text = viewModel.text
     }
 
 }
