@@ -7,12 +7,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.thingsflow.internapplication.R
 import kotlinx.android.synthetic.main.main_fragment.*
-import android.os.CountDownTimer
+import android.widget.Button
 
 class MainFragment : Fragment() {
 
@@ -33,8 +31,14 @@ class MainFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         // TODO: Use the ViewModel
-        
-        message.text = viewModel.text
+        viewModel.vmText.observe(viewLifecycleOwner, Observer {
+            textview.text = it
+        })
+        val btn: Button = button
+        btn.setOnClickListener {
+            viewModel.initText()
+            btn.setVisibility(View.INVISIBLE)
+        }
     }
 
 }
