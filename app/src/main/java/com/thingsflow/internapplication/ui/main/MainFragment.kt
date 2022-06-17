@@ -9,8 +9,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import com.thingsflow.internapplication.R
-import kotlinx.android.synthetic.main.main_fragment.*
 import android.widget.Button
+import androidx.viewbinding.ViewBinding
+import com.thingsflow.internapplication.databinding.MainFragmentBinding
 
 class MainFragment : Fragment() {
 
@@ -18,13 +19,22 @@ class MainFragment : Fragment() {
         fun newInstance() = MainFragment()
     }
 
+    private var _binding: MainFragmentBinding? = null
+    private val binding get() = _binding!!
+
     private lateinit var viewModel: MainViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.main_fragment, container, false)
+        _binding = MainFragmentBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -32,9 +42,9 @@ class MainFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         // TODO: Use the ViewModel
         viewModel.vmText.observe(viewLifecycleOwner, Observer {
-            textview.text = it
+            binding.textview.text = it
         })
-        val btn: Button = button
+        val btn: Button = binding.button
         btn.setOnClickListener {
             viewModel.initText()
             btn.setVisibility(View.INVISIBLE)
