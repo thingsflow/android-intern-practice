@@ -41,16 +41,21 @@ class MainFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         // TODO: Use the ViewModel
-        viewModel.initText()
+        val btn: Button = binding.button
         viewModel.vmText.observe(viewLifecycleOwner, Observer {
             binding.textview.text = it
-            if(it != null){
-                val btn: Button = binding.button
-                btn.setOnClickListener {
-                    btn.setVisibility(View.INVISIBLE)
-                }
+            if(it.isNotBlank()){
+                binding.textview.setVisibility(View.VISIBLE)
+                binding.button.setVisibility(View.GONE)
+            }
+            else {
+                binding.textview.setVisibility(View.GONE)
+                binding.button.setVisibility(View.VISIBLE)
             }
         })
+        btn.setOnClickListener {
+            viewModel.initText()
+        }
     }
 
 }
