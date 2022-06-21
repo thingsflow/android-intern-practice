@@ -1,7 +1,8 @@
 package com.thingsflow.internapplication
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.ActionBar
+import androidx.appcompat.app.AppCompatActivity
 import com.thingsflow.internapplication.ui.main.MainFragment
 
 class MainActivity : AppCompatActivity() {
@@ -15,4 +16,12 @@ class MainActivity : AppCompatActivity() {
                 .commitNow()
         }
     }
+
+    fun setActionBarTitle(title: String?) {
+        val actionBar: ActionBar? = supportActionBar
+        if (actionBar != null) {
+            actionBar.setTitle(title)
+        }
+    }
+
 }
