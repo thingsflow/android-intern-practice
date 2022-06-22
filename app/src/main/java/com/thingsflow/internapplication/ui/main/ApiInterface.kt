@@ -13,7 +13,7 @@ import retrofit2.http.Header
 interface ApiInterface {
     interface GitHubApi{
         @GET("repos/{org}/{repo}/issues")
-        fun getIssues(@Path("org") org: String, @Path("repo") repo: String, @Header("Authorization") accessToken: String): Call<List<Issue>>
+        fun getIssues(@Path("org") org: String, @Path("repo") repo: String, @Header("Authorization") accessToken: String): Call<List<Issues>>
     }
     companion object {
         fun getContent(): GitHubApi{

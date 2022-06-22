@@ -34,7 +34,6 @@ class MainFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        onResume()
         _binding = MainFragmentBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -48,8 +47,6 @@ class MainFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         // TODO: Use the ViewModel
-        var org = "google"
-        var repo = "dagger"
         var img_url = "https://s3.ap-northeast-2.amazonaws.com/hellobot-kr-test/image/main_logo.png"
 
         binding.titleTxtView.setOnClickListener(View.OnClickListener {
@@ -63,8 +60,6 @@ class MainFragment : Fragment() {
                     val textView2: TextView = popupView.findViewById(R.id.input_repo)
                     viewModel.updateList(textView1.text.toString(), textView2.text.toString())
                     dialog.cancel()
-                    org = textView1.text.toString()
-                    repo = textView2.text.toString()
                 })
                 .setNegativeButton("Cancel", DialogInterface.OnClickListener{ dialog, id ->
                     dialog.cancel()
@@ -74,31 +69,25 @@ class MainFragment : Fragment() {
         })
         glide = Glide.with(this)
 
-        var adapter = RecyclerAdapter(this, org, repo, img_url,glide)
+        var adapter = RecyclerAdapter(this,img_url,glide)
         binding.recyclerView.adapter = adapter
-        viewModel.getOrg()?.let{
-            org = it
-        }
-        viewModel.getRepo()?.let{
-            repo = it
-        }
-        Log.d("Log" ,"${org}, ${repo}")
-        viewModel.updateList(org, repo)
+
         viewModel.issueList.observe(viewLifecycleOwner, Observer {
-            viewModel.updateInput(org, repo)
-            binding.titleTxtView.text = viewModel.getTitle()
-            adapter.setNewItems(viewModel.getList())
+            adapter.setNewItems(it as MutableList<Issues>)
+        })
+        viewModel.listTitle.observe(viewLifecycleOwner, Observer {
+            binding.titleTxtView.text = viewModel.listTitle.value.toString()
         })
 
-        viewModel.b.observe(viewLifecycleOwner, Observer{
-            if(viewModel.b.value == false){
+        viewModel.searchSuccess.observe(viewLifecycleOwner, Observer{
+            if(viewModel.searchSuccess.value == false){
                 val errDialogBuilder = AlertDialog.Builder(requireActivity())
                 errDialogBuilder.setTitle("ERROR")
                 errDialogBuilder.setMessage("A Non-existence Repository")
                 errDialogBuilder.setPositiveButton("OK", DialogInterface.OnClickListener { popdialog, i -> popdialog.cancel() })
                 errDialogBuilder.create()
                 errDialogBuilder.show()
-                viewModel.changeB(true)
+                viewModel.changeBoolean(true)
             }
         })
     }

@@ -8,16 +8,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.thingsflow.internapplication.MainActivity
-import com.thingsflow.internapplication.databinding.SubFragmentBinding
+import com.thingsflow.internapplication.databinding.DetailIssueFragmentBinding
 
 
-class SubFragment: Fragment() {
+class DetailIssueFragment: Fragment() {
 
     companion object {
-        fun newInstance() = SubFragment()
+        fun newInstance() = DetailIssueFragment()
     }
 
-    private var _binding: SubFragmentBinding? = null
+    private var _binding: DetailIssueFragmentBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var number: String
@@ -27,10 +27,9 @@ class SubFragment: Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        Log.d("arg", arguments.toString())
         number = arguments?.get("number").toString()
         content = arguments?.get("content").toString()
-        _binding = SubFragmentBinding.inflate(inflater, container, false)
+        _binding = DetailIssueFragmentBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -43,14 +42,13 @@ class SubFragment: Fragment() {
         super.onActivityCreated(savedInstanceState)
         binding.detailIssue.setMovementMethod(ScrollingMovementMethod());
         binding.detailIssue.text = content
-        onResume(number)
     }
 
-    fun onResume(s: String) {
-        //super.onResume()
+    override fun onResume() {
+        super.onResume()
         val activity = activity
         if (activity != null) {
-            (activity as MainActivity).setActionBarTitle("#${s}")
+            (activity as MainActivity).setActionBarTitle("#${number}")
         }
     }
 }
