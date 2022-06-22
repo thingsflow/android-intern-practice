@@ -10,71 +10,79 @@ import retrofit2.Response
 
 
 class MainViewModel : ViewModel() {
-    // TODO: Implement the ViewModel
-    private val inputList = mutableListOf<String>()
-    protected val _liveInputList = MutableLiveData<List<String>>()
-    val liveInputList: LiveData<List<String>> = _liveInputList
+    private val _issueList = MutableLiveData<List<Issue>>()
+    val issueList: LiveData<List<Issue>> = _issueList
 
-    private val list = mutableListOf<Issues>()
-    private val _issueList = MutableLiveData<List<Issues>>()
-    val issueList: LiveData<List<Issues>> = _issueList
-
-    protected val _listTitle = MutableLiveData<String>()
+    private val _listTitle = MutableLiveData<String>()
     val listTitle: LiveData<String> = _listTitle
 
     private val _searchSuccess = MutableLiveData<Boolean>()
     val searchSuccess: LiveData<Boolean> = _searchSuccess
 
     init {
-        _issueList.value = list
         updateList("google", "dagger")
-        updateInput("google", "dagger")
-        _listTitle.value = "${inputList[0]}/${inputList[1]}"
         _searchSuccess.value = true
     }
 
-    fun changeBoolean(bool:Boolean){
+    fun changeBoolean(bool: Boolean) {
         _searchSuccess.value = bool
     }
 
-    fun updateInput(org: String, repo: String){
-        inputList.clear()
-        inputList.add(org)
-        inputList.add(repo)
-        _liveInputList.value = inputList
-        _listTitle.value = "${inputList[0]}/${inputList[1]}"
+    fun updateInput(org: String, repo: String) {
+        _listTitle.value = "$org/$repo"
     }
 
     fun updateList(org: String, repo: String) {
-        ApiInterface.getContent().getIssues(org, repo, "token -").enqueue(object : Callback<List<Issues>>{
-            override fun onResponse(call: Call<List<Issues>>, response: Response<List<Issues>>) {
-                response?.let {
-                    if(it.isSuccessful){
-                        _searchSuccess.value = true
-                        list.clear()
-                        for (r in response.body()!!){
-                            if(list.size==4) {
-                                list.add(Issues("", "", body = "https://thingsflow.com/ko/home"))
+        ApiInterface.getContent().getIssues(org, repo, "token -")
+            .enqueue(object : Callback<List<IssueData>> {
+                override fun onResponse(
+                    call: Call<List<IssueData>>,
+                    response: Response<List<IssueData>>
+                ) {
+                    response.let {
+                        if (it.isSuccessful) {
+                            _searchSuccess.value = true
+                            val list = issueList.value?.toMutableList() ?: mutableListOf()
+                            list.clear()
+                            for (r in response.body()!!) {
+                                if (list.size == 4) {
+                                    list.add(
+                                        Issue.Image(
+                                            "https://s3.ap-northeast-2.amazonaws.com/hellobot-kr-test/image/main_logo.png",
+                                            "https://thingsflow.com/ko/home"
+                                        )
+                                    )
+                                }
+                                r.body
+                                if(r.body!=null){
+                                    list.add(
+                                        Issue.GithubIssue(
+                                            number = r.number,
+                                            title = r.title,
+                                            body = r.body
+                                        )
+                                    )
+                                } else{
+                                    list.add(
+                                        Issue.GithubIssue(
+                                            number = r.number,
+                                            title = r.title
+                                        )
+                                    )
+                                }
                             }
-
-                            if(r.body != null) {
-                                list.add(Issues(number = r.number, title = r.title, body = r.body))
-                            } else list.add(Issues(number = r.number, title = r.title))
+                            _issueList.value = list
+                            updateInput(org, repo)
+                        } else {
+                            _searchSuccess.value = false
+                            Log.d("LOG", "Connection Failure : ${it.errorBody()?.string()}")
                         }
-                        _issueList.value = list
-                        updateInput(org, repo)
-                    }
-                    else{
-                        _searchSuccess.value = false
-                        Log.d("LOG", "Connection Failure : ${it.errorBody()?.string()}")
                     }
                 }
-            }
 
-            override fun onFailure(call: Call<List<Issues>>, t: Throwable) {
-                Log.d("LOG", "Connection Failure?!")
-            }
+                override fun onFailure(call: Call<List<IssueData>>, t: Throwable) {
+                }
 
-        })
+            })
     }
 }

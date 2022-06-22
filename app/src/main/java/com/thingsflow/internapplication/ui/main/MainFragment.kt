@@ -47,7 +47,6 @@ class MainFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         // TODO: Use the ViewModel
-        var img_url = "https://s3.ap-northeast-2.amazonaws.com/hellobot-kr-test/image/main_logo.png"
 
         binding.titleTxtView.setOnClickListener(View.OnClickListener {
             val dialogBuilder = AlertDialog.Builder(requireActivity())
@@ -55,13 +54,14 @@ class MainFragment : Fragment() {
             dialogBuilder.setMessage("Oranizaion/Repository")
             val popupView = layoutInflater.inflate(R.layout.input_popup, null)
             dialogBuilder.setView(popupView)
-                .setPositiveButton("Search", DialogInterface.OnClickListener{ dialog, id ->
+                .setPositiveButton("Search", DialogInterface.OnClickListener { dialog, id ->
                     val textView1: TextView = popupView.findViewById(R.id.input_org)
                     val textView2: TextView = popupView.findViewById(R.id.input_repo)
+                    Log.d("LOG", "${textView1.text.toString()}, ${textView2.text.toString()}")
                     viewModel.updateList(textView1.text.toString(), textView2.text.toString())
                     dialog.cancel()
                 })
-                .setNegativeButton("Cancel", DialogInterface.OnClickListener{ dialog, id ->
+                .setNegativeButton("Cancel", DialogInterface.OnClickListener { dialog, id ->
                     dialog.cancel()
                 })
             dialogBuilder.create()
@@ -69,28 +69,45 @@ class MainFragment : Fragment() {
         })
         glide = Glide.with(this)
 
-        var adapter = RecyclerAdapter(this,img_url,glide)
+        val adapter = RecyclerAdapter(object : RecyclerAdapter.HolderEvent {
+            override fun onClickIssue(issue: Issue.GithubIssue) {
+                val bundle = Bundle()
+                bundle.putString("number", issue.number)
+                bundle.putString("content", issue.body)
+                val subFrag = DetailIssueFragment.newInstance()
+                subFrag.arguments = bundle
+
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.container, subFrag)
+                    .addToBackStack(null).commit()
+            }
+        })
+
         binding.recyclerView.adapter = adapter
 
-        viewModel.issueList.observe(viewLifecycleOwner, Observer {
-            adapter.setNewItems(it as MutableList<Issues>)
-        })
+        viewModel.issueList.observe(viewLifecycleOwner) {
+            adapter.submitList(it)
+        }
+
         viewModel.listTitle.observe(viewLifecycleOwner, Observer {
             binding.titleTxtView.text = viewModel.listTitle.value.toString()
         })
 
-        viewModel.searchSuccess.observe(viewLifecycleOwner, Observer{
-            if(viewModel.searchSuccess.value == false){
+        viewModel.searchSuccess.observe(viewLifecycleOwner, Observer {
+            if (viewModel.searchSuccess.value == false) {
                 val errDialogBuilder = AlertDialog.Builder(requireActivity())
                 errDialogBuilder.setTitle("ERROR")
                 errDialogBuilder.setMessage("A Non-existence Repository")
-                errDialogBuilder.setPositiveButton("OK", DialogInterface.OnClickListener { popdialog, i -> popdialog.cancel() })
+                errDialogBuilder.setPositiveButton(
+                    "OK",
+                    DialogInterface.OnClickListener { popdialog, i -> popdialog.cancel() })
                 errDialogBuilder.create()
                 errDialogBuilder.show()
                 viewModel.changeBoolean(true)
             }
         })
     }
+
     override fun onResume() {
         super.onResume()
         val activity = activity

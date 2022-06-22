@@ -11,22 +11,26 @@ import okhttp3.OkHttpClient
 import retrofit2.http.Header
 
 interface ApiInterface {
-    interface GitHubApi{
+    interface GitHubApi {
         @GET("repos/{org}/{repo}/issues")
-        fun getIssues(@Path("org") org: String, @Path("repo") repo: String, @Header("Authorization") accessToken: String): Call<List<Issues>>
+        fun getIssues(
+            @Path("org") org: String,
+            @Path("repo") repo: String,
+            @Header("Authorization") accessToken: String
+        ): Call<List<IssueData>>
     }
+
     companion object {
-        fun getContent(): GitHubApi{
+        fun getContent(): GitHubApi {
             val client = OkHttpClient.Builder().build()
             val moshi = Moshi.Builder().build()
-            val retrofitBuild = Retrofit.Builder()
+            return Retrofit.Builder()
                 .baseUrl("https://api.github.com/")
                 .client(client)
                 .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
                 .addConverterFactory(MoshiConverterFactory.create(moshi))
                 .build()
                 .create(GitHubApi::class.java)
-            return retrofitBuild
         }
     }
 }
