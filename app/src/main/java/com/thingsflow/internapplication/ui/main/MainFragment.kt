@@ -41,7 +41,7 @@ class MainFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
+        _binding = nul
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -90,17 +90,17 @@ class MainFragment : Fragment() {
             adapter.setNewItems(viewModel.getList())
         })
 
-        viewModel.b.observe(viewLifecycleOwner, Observer{
-            if(viewModel.b.value == false){
-                val errDialogBuilder = AlertDialog.Builder(requireActivity())
-                errDialogBuilder.setTitle("ERROR")
-                errDialogBuilder.setMessage("A Non-existence Repository")
-                errDialogBuilder.setPositiveButton("OK", DialogInterface.OnClickListener { popdialog, i -> popdialog.cancel() })
-                errDialogBuilder.create()
-                errDialogBuilder.show()
-                viewModel.changeB(true)
-            }
-        })
+//        viewModel.b.observe(viewLifecycleOwner, Observer{
+//            if(viewModel.b.value == false){
+//                val errDialogBuilder = AlertDialog.Builder(requireActivity())
+//                errDialogBuilder.setTitle("ERROR")
+//                errDialogBuilder.setMessage("A Non-existence Repository")
+//                errDialogBuilder.setPositiveButton("OK", DialogInterface.OnClickListener { popdialog, i -> popdialog.cancel() })
+//                errDialogBuilder.create()
+//                errDialogBuilder.show()
+//                viewModel.changeB(true)
+//            }
+//        })
     }
     override fun onResume() {
         super.onResume()

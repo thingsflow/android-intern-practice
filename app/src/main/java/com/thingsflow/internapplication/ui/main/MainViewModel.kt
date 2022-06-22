@@ -77,29 +77,30 @@ class MainViewModel : ViewModel() {
     }
 
     fun updateList(org: String, repo: String) {
-        ApiInterface.getContent().getIssues(org, repo, "token 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").enqueue(object : Callback<List<Issue>>{
-            override fun onResponse(call: Call<List<Issue>>, response: Response<List<Issue>>) {
-                response?.let {
-                    if(it.isSuccessful){
-                        _b.value = true
-                        list.clear()
-                        for (r in response.body()!!){
-                            if(r.body != null) {
-                                list.add(Issue(number = r.number, title = r.title, body = r.body))
-                            } else list.add(Issue(number = r.number, title = r.title))
-                        }
-                        _issueList.value = list
-                    }
-                    else{
-                        _b.value = false
-                        Log.d("LOG", "Connection Failure : ${it.errorBody()?.string()}")
-                    }
-                }
-            }
 
-            override fun onFailure(call: Call<List<Issue>>, t: Throwable) {
-            }
-
-        })
+//        ApiInterface.getContent().getIssues(org, repo, "token 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").enqueue(object : Callback<List<Issue>>{
+//            override fun onResponse(call: Call<List<Issue>>, response: Response<List<Issue>>) {
+//                response?.let {
+//                    if(it.isSuccessful){
+//                        _b.value = true
+//                        list.clear()
+//                        for (r in response.body()!!){
+//                            if(r.body != null) {
+//                                list.add(Issue(number = r.number, title = r.title, body = r.body))
+//                            } else list.add(Issue(number = r.number, title = r.title))
+//                        }
+//                        _issueList.value = list
+//                    }
+//                    else{
+//                        _b.value = false
+//                        Log.d("LOG", "Connection Failure : ${it.errorBody()?.string()}")
+//                    }
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<List<Issue>>, t: Throwable) {
+//            }
+//
+//        })
     }
 }
