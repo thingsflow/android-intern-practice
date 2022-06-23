@@ -1,17 +1,17 @@
 package com.thingsflow.internapplication.ui.main
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
+import dagger.hilt.android.lifecycle.HiltViewModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import javax.inject.Inject
 
-
-class MainViewModel : ViewModel() {
-    private val _issueList = MutableLiveData<List<Issue>>()
-    val issueList: LiveData<List<Issue>> = _issueList
+@HiltViewModel
+class MainViewModel @Inject constructor(private val repository: IssueRepository) : ViewModel() {
+    private val _issueList = MutableLiveData<List<IssueData>>()
+    val issueList: LiveData<List<IssueData>> = _issueList
 
     private val _listTitle = MutableLiveData<String>()
     val listTitle: LiveData<String> = _listTitle
@@ -20,7 +20,16 @@ class MainViewModel : ViewModel() {
     val searchSuccess: LiveData<Boolean> = _searchSuccess
 
     init {
-        updateList("google", "dagger")
+        if(repository.getSize()<1||repository.getAll().value==null){
+            updateList("google", "dagger")
+        }
+        else{
+            _issueList.value = repository.getAll().value
+            var splitedList = issueList.value?.get(1)?.url?.split("/")
+            splitedList?.let{
+                updateInput(it[4], it[5])
+            }
+        }
         _searchSuccess.value = true
     }
 
@@ -33,6 +42,7 @@ class MainViewModel : ViewModel() {
     }
 
     fun updateList(org: String, repo: String) {
+
         ApiInterface.getContent().getIssues(org, repo, "token -")
             .enqueue(object : Callback<List<IssueData>> {
                 override fun onResponse(
@@ -42,36 +52,39 @@ class MainViewModel : ViewModel() {
                     response.let {
                         if (it.isSuccessful) {
                             _searchSuccess.value = true
-                            val list = issueList.value?.toMutableList() ?: mutableListOf()
-                            list.clear()
+                            repository.deleteAllIssues()
                             for (r in response.body()!!) {
-                                if (list.size == 4) {
-                                    list.add(
-                                        Issue.Image(
-                                            "https://s3.ap-northeast-2.amazonaws.com/hellobot-kr-test/image/main_logo.png",
-                                            "https://thingsflow.com/ko/home"
+                                if ( repository.getSize() == 4) {
+                                    repository.insert(
+                                        IssueData(
+                                            id = repository.getSize(),
+                                            url = "https://s3.ap-northeast-2.amazonaws.com/hellobot-kr-test/image/main_logo.png",
+                                            body = "https://thingsflow.com/ko/home"
                                         )
                                     )
                                 }
-                                r.body
                                 if(r.body!=null){
-                                    list.add(
-                                        Issue.GithubIssue(
+                                    repository.insert(
+                                        IssueData(
+                                            id =repository.getSize(),
+                                            url = r.url,
                                             number = r.number,
                                             title = r.title,
                                             body = r.body
                                         )
                                     )
                                 } else{
-                                    list.add(
-                                        Issue.GithubIssue(
+                                    repository.insert(
+                                        IssueData(
+                                            id = repository.getSize(),
+                                            url = r.url,
                                             number = r.number,
                                             title = r.title
                                         )
                                     )
                                 }
                             }
-                            _issueList.value = list
+                            _issueList.value = repository.getAll().value
                             updateInput(org, repo)
                         } else {
                             _searchSuccess.value = false

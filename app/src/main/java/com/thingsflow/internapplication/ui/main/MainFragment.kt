@@ -3,7 +3,6 @@ package com.thingsflow.internapplication.ui.main
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,8 +15,12 @@ import com.bumptech.glide.RequestManager
 import com.thingsflow.internapplication.MainActivity
 import com.thingsflow.internapplication.R
 import com.thingsflow.internapplication.databinding.MainFragmentBinding
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
-
+@AndroidEntryPoint
 class MainFragment : Fragment() {
 
     companion object {
@@ -46,6 +49,7 @@ class MainFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+
         // TODO: Use the ViewModel
 
         binding.titleTxtView.setOnClickListener(View.OnClickListener {
@@ -57,7 +61,6 @@ class MainFragment : Fragment() {
                 .setPositiveButton("Search", DialogInterface.OnClickListener { dialog, id ->
                     val textView1: TextView = popupView.findViewById(R.id.input_org)
                     val textView2: TextView = popupView.findViewById(R.id.input_repo)
-                    Log.d("LOG", "${textView1.text.toString()}, ${textView2.text.toString()}")
                     viewModel.updateList(textView1.text.toString(), textView2.text.toString())
                     dialog.cancel()
                 })
@@ -110,7 +113,6 @@ class MainFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        val activity = activity
         if (activity != null) {
             (activity as MainActivity).setActionBarTitle("InterApplication")
         }
